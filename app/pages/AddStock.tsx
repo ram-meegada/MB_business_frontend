@@ -1,7 +1,18 @@
-import { StyleSheet, Text, View, StatusBar, Pressable, TextInput } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Pressable,
+  TextInput,
+} from "react-native";
+import React, { useState } from "react";
 import { AddStockProps } from "../navigationTypes";
-import { globalStyle, secondaryColor, thirdColor } from "@/constants/globalStyles";
+import {
+  globalStyle,
+  secondaryColor,
+  thirdColor,
+} from "@/constants/globalStyles";
 import { Image } from "react-native";
 
 type Props = {
@@ -9,6 +20,18 @@ type Props = {
 };
 
 const AddStock = () => {
+  const [textHighlight, setTextHighlight] = useState(-1);
+  const textInputList = [
+    {
+      title: "Age",
+    },
+    {
+      title: "Purchase price",
+    },
+    {
+      title: "Milk capacity(in litres)",
+    },
+  ];
   return (
     <View style={globalStyle.container}>
       <View
@@ -16,10 +39,12 @@ const AddStock = () => {
           flex: 1,
           marginTop: StatusBar.currentHeight ? StatusBar.currentHeight : 10,
           marginHorizontal: 20,
-        //   backgroundColor: 'red',
+          //   backgroundColor: 'red',
         }}
       >
-        <Text style={{ fontSize: 24, alignSelf: "center", marginBottom: 20 }}>Add Stock</Text>
+        <Text style={{ fontSize: 24, alignSelf: "center", marginBottom: 20 }}>
+          Add Stock
+        </Text>
         <View style={{ width: 100, height: 110, marginBottom: 20 }}>
           <Image
             source={require("../../assets/images/upload_buffalo_image.png")}
@@ -53,9 +78,21 @@ const AddStock = () => {
             />
           </Pressable>
         </View>
-        <TextInput style={styles.textInput} placeholder="Enter stock age">
-
-        </TextInput>
+        {textInputList.map((placeholder, index) => (
+          <TextInput
+            key={index}
+            onFocus={() => setTextHighlight(index)}
+            style={[
+              styles.textInput,
+              {
+                borderColor: textHighlight == index ? thirdColor : "",
+                borderWidth: textHighlight == index ? 2 : 0,
+              },
+            ]}
+            placeholder={placeholder.title}
+            keyboardType="numeric"
+          ></TextInput>
+        ))}
       </View>
     </View>
   );
@@ -64,11 +101,11 @@ const AddStock = () => {
 export default AddStock;
 
 const styles = StyleSheet.create({
-    textInput: {
-        height: 40,
-        borderWidth: 2,
-        marginBottom: 10,
-        borderRadius: 20,
-        borderColor: thirdColor
-    }
+  textInput: {
+    height: 50,
+    marginBottom: 10,
+    borderRadius: 30,
+    backgroundColor: secondaryColor,
+    paddingLeft: 10,
+  },
 });

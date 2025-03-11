@@ -10,7 +10,7 @@ import AddStock from "../pages/AddStock";
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
-    <Stack.Navigator initialRouteName="ThirdPage">
+    <Stack.Navigator initialRouteName="AddStock">
       <Stack.Screen
         name="Home"
         component={HomePage}
