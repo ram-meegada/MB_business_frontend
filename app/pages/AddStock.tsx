@@ -5,6 +5,7 @@ import {
   StatusBar,
   Pressable,
   TextInput,
+  FlatList,
 } from "react-native";
 import React, { useState } from "react";
 import { AddStockProps } from "../navigationTypes";
@@ -14,6 +15,8 @@ import {
   thirdColor,
 } from "@/constants/globalStyles";
 import { Image } from "react-native";
+import { addStockInputFields } from "@/constants/inputFields";
+import CustomButtonComponent from "@/components/customButtonComponent";
 
 type Props = {
   navigation: AddStockProps;
@@ -21,17 +24,7 @@ type Props = {
 
 const AddStock = () => {
   const [textHighlight, setTextHighlight] = useState(-1);
-  const textInputList = [
-    {
-      title: "Age",
-    },
-    {
-      title: "Purchase price",
-    },
-    {
-      title: "Milk capacity(in litres)",
-    },
-  ];
+
   return (
     <View style={globalStyle.container}>
       <View
@@ -39,6 +32,7 @@ const AddStock = () => {
           flex: 1,
           marginTop: StatusBar.currentHeight ? StatusBar.currentHeight : 10,
           marginHorizontal: 20,
+          marginBottom: 20,
           //   backgroundColor: 'red',
         }}
       >
@@ -78,21 +72,28 @@ const AddStock = () => {
             />
           </Pressable>
         </View>
-        {textInputList.map((placeholder, index) => (
-          <TextInput
-            key={index}
-            onFocus={() => setTextHighlight(index)}
-            style={[
-              styles.textInput,
-              {
-                borderColor: textHighlight == index ? thirdColor : "",
-                borderWidth: textHighlight == index ? 2 : 0,
-              },
-            ]}
-            placeholder={placeholder.title}
-            keyboardType="numeric"
-          ></TextInput>
-        ))}
+        <FlatList
+          data={addStockInputFields}
+          renderItem={({ item, index }) => (
+            <TextInput
+              onFocus={() => setTextHighlight(index)}
+              style={[
+                styles.textInput,
+                {
+                  borderColor: textHighlight == index ? thirdColor : "transparent",
+                  borderWidth: textHighlight == index ? 2 : 0,
+                  height: item.type == "text" ? 100 : styles.textInput.height,
+                  textAlignVertical: item.type == "text" ? 'top' : 'auto',
+                  borderRadius: item.type == "text" ? 15 : styles.textInput.borderRadius,
+                },
+              ]}
+              placeholder={item.title}
+              multiline={item.type == "text"}
+              keyboardType={item.type == "numeric" ? "numeric" : "default"}
+            ></TextInput>
+          )}
+          ListFooterComponent={<CustomButtonComponent />}
+        />
       </View>
     </View>
   );
