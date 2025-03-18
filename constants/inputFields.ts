@@ -12,8 +12,8 @@ export const addStockInputFields = [
       type: 'DATE'
     },
     {
-      title: "Age",
-      type: 'numeric'
+      title: "Date Of Birth",
+      type: 'DATE'
     },
     {
       title: "Lactation Stage(in months)",

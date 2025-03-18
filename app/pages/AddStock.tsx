@@ -11,7 +11,7 @@ import {
   Button,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AddStockProps } from "../navigationTypes";
 import {
   globalStyle,
@@ -38,7 +38,8 @@ const AddStock = () => {
   const [breedValue, setBreedValue] = useState(null);
   const [pregnacncyStatus, setPregnacncyStatus] = useState("no");
   const [image, setImage] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
+  const [lastCalvingDate, setLastCalvingDate] = useState<Date | null>(null);
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -49,8 +50,13 @@ const AddStock = () => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (selectedDate: Date) => {
-    setDate(selectedDate);
+  const handleConfirm = (selectedDate: Date, title: string) => {
+    console.log(title, "==========title========");
+    if (title === "Last Calving Date") {
+      setLastCalvingDate(selectedDate);
+    } else if (title === "Date Of Birth") {
+      setDateOfBirth(selectedDate);
+    }
     hideDatePicker();
   };
 
@@ -75,6 +81,19 @@ const AddStock = () => {
       }
     }
   };
+
+  const displayDateText = (title: string) => {
+    if (title === "Last Calving Date" && lastCalvingDate) {
+      return lastCalvingDate.toDateString();
+    } else if (title === "Date Of Birth" && dateOfBirth) {
+      return dateOfBirth.toDateString();
+    }
+    return title;
+  };
+
+  useEffect(() => {
+    console.log(lastCalvingDate, dateOfBirth, "[==============]");
+  }, [lastCalvingDate, dateOfBirth]);
 
   const selectImage = async () => {
     Alert.alert("Upload Image", "Choose an option", [
@@ -255,14 +274,16 @@ const AddStock = () => {
                           fontSize: 14,
                         }}
                       >
-                        {date ? date.toDateString() : item.title}
+                        {displayDateText(item.title)}
                       </Text>
                     </Pressable>
                     <DateTimePickerModal
                       style={styles.textInput}
                       isVisible={isDatePickerVisible}
                       mode="date"
-                      onConfirm={handleConfirm}
+                      onConfirm={(selectedDate) =>
+                        handleConfirm(selectedDate, item.title)
+                      }
                       onCancel={hideDatePicker}
                     />
                   </View>
