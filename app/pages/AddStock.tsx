@@ -11,7 +11,7 @@ import {
   Button,
   Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AddStockProps } from "../navigationTypes";
 import {
   globalStyle,
@@ -28,6 +28,7 @@ import CustomButtonComponent from "@/components/customButtonComponent";
 import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { ADD_STOCK_ENDPOINT } from "@/constants/endpoints";
 
 type Props = {
   navigation: AddStockProps;
@@ -40,9 +41,43 @@ const AddStock = () => {
   const [image, setImage] = useState("");
   const [lastCalvingDate, setLastCalvingDate] = useState<Date | null>(null);
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
+  const [selectedDateTitle, setSelectedDateTitle] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const showDatePicker = () => {
+  const CallApi = async () => {
+    console.log("7777777777777777777");
+
+    const PAYLOAD = {
+      breed: breedValue,
+      is_pregnant: pregnacncyStatus,
+      last_calvation_date: lastCalvingDate,
+      date_of_birth: dateOfBirth,
+      lactation_month: 3,
+      purchase_price: 50000,
+      milk_capacity: 10,
+      parity: 2,
+      seller_details: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+      qualities: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+      food_habits: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    };
+    try {
+      const response = await fetch(ADD_STOCK_ENDPOINT, {
+        method: "POST",
+        body: JSON.stringify(PAYLOAD),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      const json_response = await response.json();
+      console.log(json_response, "----json==========");
+    } catch (err) {
+      console.log(err, "----errr-----");
+    }
+  };
+
+  const showDatePicker = (title: string) => {
+    setSelectedDateTitle(title);
     setDatePickerVisibility(true);
   };
 
@@ -50,15 +85,23 @@ const AddStock = () => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (selectedDate: Date, title: string) => {
-    console.log(title, "==========title========");
-    if (title === "Last Calving Date") {
+  const handleConfirm = (selectedDate: Date) => {
+    if (selectedDateTitle === "Last Calving Date") {
       setLastCalvingDate(selectedDate);
-    } else if (title === "Date Of Birth") {
+    } else if (selectedDateTitle === "Date Of Birth") {
       setDateOfBirth(selectedDate);
     }
     hideDatePicker();
   };
+
+  function displayDate(title: string) {
+    if (title === "Last Calving Date") {
+      return lastCalvingDate ? lastCalvingDate.toDateString() : title;
+    } else if (title === "Date Of Birth") {
+      return dateOfBirth ? dateOfBirth.toDateString() : title;
+    }
+    return null;
+  }
 
   const pickImage = async () => {
     // Request permission
@@ -81,19 +124,6 @@ const AddStock = () => {
       }
     }
   };
-
-  const displayDateText = (title: string) => {
-    if (title === "Last Calving Date" && lastCalvingDate) {
-      return lastCalvingDate.toDateString();
-    } else if (title === "Date Of Birth" && dateOfBirth) {
-      return dateOfBirth.toDateString();
-    }
-    return title;
-  };
-
-  useEffect(() => {
-    console.log(lastCalvingDate, dateOfBirth, "[==============]");
-  }, [lastCalvingDate, dateOfBirth]);
 
   const selectImage = async () => {
     Alert.alert("Upload Image", "Choose an option", [
@@ -121,6 +151,16 @@ const AddStock = () => {
       setImage(result.assets[0].uri);
     }
   };
+
+  function setDateColor(title: string) {
+    if (title === "Last Calving Date" && lastCalvingDate) {
+      return "black";
+    }
+    if (title === "Date Of Birth" && dateOfBirth) {
+      return "black";
+    }
+    return "grey";
+  }
 
   return (
     <View style={globalStyle.container}>
@@ -199,6 +239,7 @@ const AddStock = () => {
                       },
                     ]}
                     placeholder={item.title}
+                    placeholderTextColor="grey"
                     multiline={item.type == "text"}
                     keyboardType={
                       item.type == "numeric" ? "numeric" : "default"
@@ -253,7 +294,7 @@ const AddStock = () => {
                         zIndex: 2,
                         transform: [{ translateY: -5 }, { translateX: -5 }],
                       }}
-                      onPress={showDatePicker}
+                      onPress={() => showDatePicker(item.title)}
                     >
                       <Image
                         source={require("../../assets/images/calender.png")}
@@ -263,27 +304,25 @@ const AddStock = () => {
                     <Pressable
                       style={[styles.textInput, { justifyContent: "center" }]}
                       // placeholder={item.title}
-                      onPress={showDatePicker}
+                      onPress={() => showDatePicker(item.title)}
                       // editable={false}
                       // pointerEvents="none"
                     >
                       <Text
                         style={{
                           fontWeight: "400",
-                          color: "grey",
+                          color: setDateColor(item.title),
                           fontSize: 14,
                         }}
                       >
-                        {displayDateText(item.title)}
+                        {displayDate(item.title)}
                       </Text>
                     </Pressable>
                     <DateTimePickerModal
                       style={styles.textInput}
                       isVisible={isDatePickerVisible}
                       mode="date"
-                      onConfirm={(selectedDate) =>
-                        handleConfirm(selectedDate, item.title)
-                      }
+                      onConfirm={handleConfirm}
                       onCancel={hideDatePicker}
                     />
                   </View>
@@ -292,7 +331,7 @@ const AddStock = () => {
                 return null;
               }
             }}
-            ListFooterComponent={<CustomButtonComponent />}
+            ListFooterComponent={<CustomButtonComponent onSubmit={CallApi} />}
           />
         </ScrollView>
       </View>
@@ -307,6 +346,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: secondaryColor,
     paddingLeft: 10,
+    color: "black",
   },
   uploadIcon: {
     height: 30,

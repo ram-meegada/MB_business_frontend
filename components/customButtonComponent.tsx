@@ -2,17 +2,24 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { thirdColor } from "@/constants/globalStyles";
 
-const CustomButtonComponent = () => {
+type Props = {
+  onSubmit: () => void;
+};
+
+const CustomButtonComponent: React.FC<Props> = ({ onSubmit }) => {
   return (
-    <Pressable style={{ 
+    <Pressable
+      onPress={onSubmit}
+      style={{
         backgroundColor: thirdColor,
         height: 50,
         width: 100,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 8
-     }}>
-        <Text style={{ fontSize: 18, fontWeight: '500' }}>Submit</Text>
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 8,
+      }}
+    >
+      <Text style={{ fontSize: 18, fontWeight: "500" }}>Submit</Text>
     </Pressable>
   );
 };
