@@ -43,35 +43,48 @@ const AddStock = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [selectedDateTitle, setSelectedDateTitle] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [lactationMonth, setLactationMonth] = useState(0);
+  const [purchasePrice, setPurchasePrice] = useState(0);
+  const [milkCapacity, setMilkCapacity] = useState(2);
+  const [parity, setParity] = useState(0);
+  const [sellerDetails, setSellerDetails] = useState("");
+  const [qualities, setQualities] = useState("");
+  const [foodHabits, setFoodHabits] = useState("");
+
+  const BEARER_TOKEN =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyNTI2MjgzLCJpYXQiOjE3NDI0Mzk4ODMsImp0aSI6IjZhNTQ5OGU1ZDEyZjQ0MDg4NjViYTg4YWE3NDMyMzA2IiwidXNlcl9pZCI6M30.XwYLo5Gq0zzlnDXQiWFlWd2vl-tmpanjEWw3A8hw1oc";
 
   const CallApi = async () => {
-    console.log("7777777777777777777");
-
     const PAYLOAD = {
       breed: breedValue,
       is_pregnant: pregnacncyStatus,
       last_calvation_date: lastCalvingDate,
       date_of_birth: dateOfBirth,
-      lactation_month: 3,
-      purchase_price: 50000,
-      milk_capacity: 10,
-      parity: 2,
-      seller_details: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      qualities: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      food_habits: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+      lactation_month: lactationMonth,
+      purchase_price: purchasePrice,
+      milk_capacity: milkCapacity,
+      parity: parity,
+      seller_details: sellerDetails,
+      qualities: qualities,
+      food_habits: foodHabits,
     };
     try {
       const response = await fetch(ADD_STOCK_ENDPOINT, {
         method: "POST",
         body: JSON.stringify(PAYLOAD),
         headers: {
+          Authorization: `Bearer ${BEARER_TOKEN}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
       });
       const json_response = await response.json();
-      console.log(json_response, "----json==========");
+      console.log(json_response, "======");
+      if (response.status === 400) {
+        Alert.alert("Error", json_response?.message);
+      }
     } catch (err) {
+      Alert.alert("Error", err instanceof Error ? err.message : String(err));
       console.log(err, "----errr-----");
     }
   };
@@ -162,6 +175,24 @@ const AddStock = () => {
     return "grey";
   }
 
+  const saveChangedText = (text: string, title: string) => {
+    if (title.includes("Lactation Stage")) {
+      setLactationMonth(parseInt(text));
+    } else if (title === "Purchase price") {
+      setPurchasePrice(parseFloat(text));
+    } else if (title.includes("Milk capacity")) {
+      setMilkCapacity(parseFloat(text));
+    } else if (title === "Parity") {
+      setParity(parseInt(text));
+    } else if (title === "Seller Details") {
+      setSellerDetails(text);
+    } else if (title === "Qualities") {
+      setQualities(text);
+    } else if (title === "Food habits") {
+      setFoodHabits(text);
+    }
+  };
+
   return (
     <View style={globalStyle.container}>
       <View
@@ -238,6 +269,7 @@ const AddStock = () => {
                             : styles.textInput.borderRadius,
                       },
                     ]}
+                    onChangeText={(text) => saveChangedText(text, item.title)}
                     placeholder={item.title}
                     placeholderTextColor="grey"
                     multiline={item.type == "text"}
