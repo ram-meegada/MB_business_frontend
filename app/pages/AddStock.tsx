@@ -29,12 +29,13 @@ import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { ADD_STOCK_ENDPOINT } from "@/constants/endpoints";
+import * as Common from "@/constants/common";
 
 type Props = {
   navigation: AddStockProps;
 };
 
-const AddStock = () => {
+const AddStock: React.FC<Props> = ({ navigation }) => {
   const [textHighlight, setTextHighlight] = useState(-1);
   const [breedValue, setBreedValue] = useState(null);
   const [pregnacncyStatus, setPregnacncyStatus] = useState("no");
@@ -50,38 +51,95 @@ const AddStock = () => {
   const [sellerDetails, setSellerDetails] = useState("");
   const [qualities, setQualities] = useState("");
   const [foodHabits, setFoodHabits] = useState("");
+  const [errors, setErrors] = useState({});
 
-  const BEARER_TOKEN =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyNTI2MjgzLCJpYXQiOjE3NDI0Mzk4ODMsImp0aSI6IjZhNTQ5OGU1ZDEyZjQ0MDg4NjViYTg4YWE3NDMyMzA2IiwidXNlcl9pZCI6M30.XwYLo5Gq0zzlnDXQiWFlWd2vl-tmpanjEWw3A8hw1oc";
+  const BEARER_TOKEN = Common.BEARER_TOKEN
+
+  function validatePayload() {
+    let hasErrors = false;
+    if (!breedValue) {
+      setErrors((prev) => ({ ...prev, breed: "Please select breed" }));
+      hasErrors = true;
+    }
+    if (!lastCalvingDate) {
+      setErrors({
+        ...errors,
+        lastCalvingDate: "Please enter last calvation date",
+      });
+      hasErrors = true;
+    }
+    if (lactationMonth === 0) {
+      setErrors({ ...errors, lactationMonth: "Please enter lactation month" });
+      hasErrors = true;
+    }
+    if (parity === 0) {
+      console.log(parity, "-----party----");
+      setErrors({ ...errors, parity: "Please fill parity" });
+      hasErrors = true;
+    } else {
+    }
+    return hasErrors;
+  }
 
   const CallApi = async () => {
-    const PAYLOAD = {
-      breed: breedValue,
-      is_pregnant: pregnacncyStatus,
-      last_calvation_date: lastCalvingDate,
-      date_of_birth: dateOfBirth,
-      lactation_month: lactationMonth,
-      purchase_price: purchasePrice,
-      milk_capacity: milkCapacity,
-      parity: parity,
-      seller_details: sellerDetails,
-      qualities: qualities,
-      food_habits: foodHabits,
-    };
+    const formData = new FormData();
+
+    formData.append("image", {
+      uri: image, // Local file path
+      name: "buffalo.png", // Extracted filename
+      type: "image/jpeg", // Extracted MIME type
+    } as any);
+    formData.append("breed", breedValue ? breedValue : "");
+    formData.append("is_pregnant", pregnacncyStatus);
+    formData.append(
+      "last_calvation_date",
+      lastCalvingDate ? lastCalvingDate.toISOString().split("T")[0] : ""
+    );
+    formData.append(
+      "date_of_birth",
+      dateOfBirth ? dateOfBirth.toISOString().split("T")[0] : ""
+    );
+    formData.append("lactation_month", lactationMonth.toString());
+    formData.append("purchase_price", String(purchasePrice));
+    formData.append("milk_capacity", String(milkCapacity));
+    formData.append("parity", parity.toString());
+    formData.append("seller_details", sellerDetails);
+    formData.append("qualities", qualities);
+    formData.append("food_habits", foodHabits);
+
+    console.log(formData, "--------fromadata------------");
+    // if (validatePayload()) {
+    //   for (let err of Object.entries(errors)) {
+    //     console.log(err, "-----err----");
+
+    //     Alert.alert(
+    //       "Validation Failed",
+    //       String(err[1]) || "Please fill the data correctly"
+    //     );
+    //     break;
+    //   }
+    //   return;
+    // }
     try {
       const response = await fetch(ADD_STOCK_ENDPOINT, {
         method: "POST",
-        body: JSON.stringify(PAYLOAD),
+        body: formData,
         headers: {
           Authorization: `Bearer ${BEARER_TOKEN}`,
           Accept: "application/json",
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
       const json_response = await response.json();
       console.log(json_response, "======");
+      if (response.status === 401) {
+        Alert.alert("Token expired", "Change token");
+      }
       if (response.status === 400) {
         Alert.alert("Error", json_response?.message);
+      } else if (response.status === 200) {
+        Alert.alert("Success!", "Live stock added successfully.");
+        navigation.replace("Home");
       }
     } catch (err) {
       Alert.alert("Error", err instanceof Error ? err.message : String(err));
@@ -155,7 +213,7 @@ const AddStock = () => {
 
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: "images",
-      allowsEditing: true,
+      // allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
@@ -195,18 +253,8 @@ const AddStock = () => {
 
   return (
     <View style={globalStyle.container}>
-      <View
-        style={{
-          flex: 1,
-          marginTop: StatusBar.currentHeight ? StatusBar.currentHeight : 10,
-          marginHorizontal: 20,
-          marginBottom: 20,
-          //   backgroundColor: 'red',
-        }}
-      >
-        <Text style={{ fontSize: 24, alignSelf: "center", marginBottom: 20 }}>
-          Add Live Stock
-        </Text>
+      <View style={globalStyle.subContainer}>
+        <Text style={globalStyle.pageHeadingStyle}>Add Live Stock</Text>
         <View style={{ width: 100, height: 110, marginBottom: 20 }}>
           <Image
             source={

@@ -24,28 +24,38 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       title: "Add stock",
       backgroundImage: require("../../assets/images/add_buffalo.png"),
       audio: require("../../assets/audio/scam_1992_bgm.mp3"),
+      navigateTo: "AddStock",
     },
     {
       title: "Daily data",
       backgroundImage: require("../../assets/images/data_entry.jpg"),
       audio: require("../../assets/audio/animal_bgm.mp3"),
+      navigateTo: "AddStock",
     },
     {
       title: "Customers",
       backgroundImage: require("../../assets/images/customers.png"),
       audio: require("../../assets/audio/jim_entry_pathan.mp3"),
+      navigateTo: "AddStock",
     },
     {
       title: "Expenditure",
       backgroundImage: require("../../assets/images/expenditure.png"),
       audio: require("../../assets/audio/captain_jacksparrow.mp3"),
+      navigateTo: "AddStock",
+    },
+    {
+      title: "Manage Stock",
+      backgroundImage: require("../../assets/images/manage_stock.png"),
+      audio: require("../../assets/audio/captain_jacksparrow.mp3"),
+      navigateTo: "ManageStock",
     },
   ];
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [audioPlaying, setaudioPlaying] = useState(-1);
 
-  const navigateToAddStock = () => {
-    navigation.navigate("AddStock");
+  const navigateToAddStock = (navigateTo: string) => {
+    navigation.navigate(navigateTo);
   };
 
   async function playSound(n: number, audio: number) {
@@ -129,7 +139,9 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           flex: 13,
           flexDirection: "row",
           flexWrap: "wrap",
-          justifyContent: "space-between",
+          justifyContent: "space-evenly",
+          // alignItems: 'center'
+          // alignContent: "flex-start",
         }}
       >
         {homePageButtons.map((key, index) => (
@@ -137,10 +149,11 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             style={{
               alignItems: "center",
               marginBottom: 20,
+              // marginRight: 8
             }}
             key={index}
           >
-            <Pressable onPress={navigateToAddStock}>
+            <Pressable onPress={() => navigateToAddStock(key.navigateTo)}>
               <ImageBackground
                 style={styles.buttons}
                 source={key.backgroundImage}
@@ -165,7 +178,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 </Pressable>
               </ImageBackground>
             </Pressable>
-            <Pressable onPress={navigateToAddStock}>
+            <Pressable onPress={() => navigateToAddStock(key.navigateTo)}>
               <View
                 style={{
                   backgroundColor: secondaryColor,

@@ -6,11 +6,12 @@ import ThirdPage from "../pages/ThirdPage";
 import { HelloWave } from "@/components/HelloWave";
 import FourthPage from "../pages/FourthPage";
 import AddStock from "../pages/AddStock";
+import ManageStock from "../pages/ManageStock";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
-    <Stack.Navigator initialRouteName="AddStock">
+    <Stack.Navigator initialRouteName="ThirdPage">
       <Stack.Screen
         name="Home"
         component={HomePage}
@@ -29,6 +30,11 @@ const App = () => {
       <Stack.Screen
         name="AddStock"
         component={AddStock}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ManageStock"
+        component={ManageStock}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

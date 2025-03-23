@@ -13,7 +13,7 @@ const ThirdPage: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     Animated.timing(translateY, {
       toValue: 0,
-      duration: 1000,
+      duration: 2000,
       useNativeDriver: true,
     }).start(() => {
       navigation.replace("Home");
@@ -32,14 +32,16 @@ const ThirdPage: React.FC<Props> = ({ navigation }) => {
       >
         <Image
           style={{
-            height: 200,
-            width: 200,
-            borderRadius: 100
+            height: 300,
+            width: 300,
+            borderRadius: 150,
           }}
-          source={require("../../assets/images/RR.jpeg")}
+          source={require("../../assets/images/home_logo.png")}
         />
         <Animated.View style={{ transform: [{ translateY }] }}>
-          <Text style={{ fontSize: 24 }}>Welcome to R</Text>
+          <Text style={{ fontSize: 24 }}>
+            Welcome to <Text style={{ color: "red" }}>Red Milk</Text>
+          </Text>
         </Animated.View>
       </View>
     </View>

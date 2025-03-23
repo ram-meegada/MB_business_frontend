@@ -1,0 +1,4 @@
+export const BEARER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyNzg3MTAxLCJpYXQiOjE3NDI3MDA3MDEsImp0aSI6IjJmMDU0ZDlmNjAyNTQ4YzRiZGMzMWFmODBkMzA4N2U4IiwidXNlcl9pZCI6M30.Iaf-_U1Dd4VArVrslz3oL1QP839hDD4JI3m1Bp3K7pk"
+// Error messages
+
+export const REQUIRED_FIELD = "*This field is required"
