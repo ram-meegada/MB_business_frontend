@@ -1,5 +1,7 @@
 export const BASE_URL = "http://192.168.1.54:8000/"
 
-// Endpoints
-export const ADD_STOCK_ENDPOINT = BASE_URL + 'live-stock/add/'
-export const LIST_STOCKS_ENDPOINT = BASE_URL + 'live-stock/all/'
+// Endpoints for Livestock
+const LIVE_STOCK_COMMON_ENDPOINT = "live-stock/"
+export const ADD_STOCK_ENDPOINT = BASE_URL + LIVE_STOCK_COMMON_ENDPOINT + 'add/'
+export const LIST_STOCKS_ENDPOINT = BASE_URL + LIVE_STOCK_COMMON_ENDPOINT + 'all/'
+export const STOCK_BY_ID_ENDPOINT = BASE_URL + LIVE_STOCK_COMMON_ENDPOINT

@@ -6,7 +6,8 @@ import ThirdPage from "../pages/ThirdPage";
 import { HelloWave } from "@/components/HelloWave";
 import FourthPage from "../pages/FourthPage";
 import AddStock from "../pages/AddStock";
-import ManageStock from "../pages/ManageStock";
+import AllLiveStocks from "../pages/AllLiveStocks";
+import ManageLiveStock from "../pages/ManageLiveStock";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -33,8 +34,13 @@ const App = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ManageStock"
-        component={ManageStock}
+        name="AllLiveStocks"
+        component={AllLiveStocks}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ManageLiveStock"
+        component={ManageLiveStock}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

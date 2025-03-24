@@ -48,7 +48,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       title: "Manage Stock",
       backgroundImage: require("../../assets/images/manage_stock.png"),
       audio: require("../../assets/audio/captain_jacksparrow.mp3"),
-      navigateTo: "ManageStock",
+      navigateTo: "AllLiveStocks",
     },
   ];
   const [sound, setSound] = useState<Audio.Sound | null>(null);

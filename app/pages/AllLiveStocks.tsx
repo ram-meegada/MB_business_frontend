@@ -18,6 +18,8 @@ import {
 } from "@/constants/globalStyles";
 import { BASE_URL, LIST_STOCKS_ENDPOINT } from "@/constants/endpoints";
 import { BEARER_TOKEN } from "@/constants/common";
+import LoadingModal from "@/components/LoadingModal";
+import { AllLiveStocksProps } from "../navigationTypes";
 
 type dataStructure = {
   id: number;
@@ -29,31 +31,48 @@ type dataStructure = {
   parity: number;
 };
 
-const ManageStock = () => {
+type Props = {
+  navigation: AllLiveStocksProps;
+};
+
+const AllLiveStocks: React.FC<Props> = ({ navigation }) => {
   const [data, setData] = useState<dataStructure[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const callAPI = async () => {
-      const response = await fetch(`${LIST_STOCKS_ENDPOINT}`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${BEARER_TOKEN}`,
-        },
-      });
-      console.log(response.status);
+      try {
+        setLoading(true);
+        const response = await fetch(`${LIST_STOCKS_ENDPOINT}`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${BEARER_TOKEN}`,
+          },
+        });
+        console.log(response.status);
 
-      if (response.ok) {
-        const json_response = await response.json();
-        setData(json_response.data);
-      } else {
-        Alert.alert("Error", "Something went wrong");
+        if (response.ok) {
+          const json_response = await response.json();
+          setData(json_response.data);
+        } else {
+          Alert.alert("Error!", "Something went wrong");
+        }
+        setLoading(false);
+      } catch (err: any) {
+        Alert.alert("Error!!", err.toString());
+        setLoading(false);
       }
     };
     callAPI();
   }, []);
 
+  function NavigateToManageStock(id: number) {
+    navigation.navigate("ManageLiveStock", { id: id });
+  }
+
   return (
     <View style={globalStyle.container}>
+      <LoadingModal visible={loading} />
       <View style={globalStyle.subContainer}>
         <Text style={globalStyle.pageHeadingStyle}>Livestock Management</Text>
         <FlatList
@@ -62,7 +81,10 @@ const ManageStock = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item, index }) => (
             <View style={styles.child}>
-              <Pressable style={{ width: 150 }}>
+              <Pressable
+                style={{ width: 150 }}
+                onPress={() => NavigateToManageStock(item.id)}
+              >
                 <Image
                   style={{
                     height: styles.child.height,
@@ -80,6 +102,7 @@ const ManageStock = () => {
                   paddingLeft: 5,
                   paddingTop: 5,
                 }}
+                onPress={() => NavigateToManageStock(item.id)}
               >
                 <View style={styles.textStyle}>
                   <Text style={styles.sideHeading}>Stock Id:</Text>
@@ -110,7 +133,7 @@ const ManageStock = () => {
   );
 };
 
-export default ManageStock;
+export default AllLiveStocks;
 
 const styles = StyleSheet.create({
   child: {

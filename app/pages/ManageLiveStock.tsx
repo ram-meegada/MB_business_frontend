@@ -11,8 +11,7 @@ import {
   Button,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
-import { AddStockProps } from "../navigationTypes";
+import React, { useEffect, useState } from "react";
 import {
   globalStyle,
   secondaryColor,
@@ -28,15 +27,26 @@ import CustomButtonComponent from "@/components/customButtonComponent";
 import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { ADD_STOCK_ENDPOINT } from "@/constants/endpoints";
+import {
+  ADD_STOCK_ENDPOINT,
+  BASE_URL,
+  STOCK_BY_ID_ENDPOINT,
+} from "@/constants/endpoints";
 import * as Common from "@/constants/common";
 import LoadingModal from "@/components/LoadingModal";
+import {
+  ManageLiveStockProps,
+  RootStackNavigationList,
+} from "../navigationTypes";
+import { RouteProp } from "@react-navigation/native";
 
 type Props = {
-  navigation: AddStockProps;
+  navigation: ManageLiveStockProps;
+  route: RouteProp<RootStackNavigationList, "ManageLiveStock">;
 };
 
-const AddStock: React.FC<Props> = ({ navigation }) => {
+const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
+  const id = route.params.id;
   const [textHighlight, setTextHighlight] = useState(-1);
   const [breedValue, setBreedValue] = useState(null);
   const [pregnacncyStatus, setPregnacncyStatus] = useState("no");
@@ -82,6 +92,42 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
     }
     return hasErrors;
   }
+
+  useEffect(() => {
+    const FetchStockById = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${STOCK_BY_ID_ENDPOINT}${id}/`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${BEARER_TOKEN}`,
+          },
+        });
+
+        if (response.ok) {
+          const json_response = await response.json();
+          const data = json_response?.data;
+          console.log(data, "----data----");
+
+          setImage(`${BASE_URL}${data.image_url}`);
+          setBreedValue(data.breed);
+          setPregnacncyStatus(data.is_pregnant ? "yes" : "no");
+          const temp_date = new Date(data.last_calvation_date);
+          const temp_date_two = new Date(data.date_of_birth);
+          setLastCalvingDate(temp_date);
+          setDateOfBirth(temp_date_two);
+          setLactationMonth(data.lactation_month);
+        } else {
+          Alert.alert("Error!", "Something went wrong");
+        }
+        setLoading(false);
+      } catch (err: any) {
+        Alert.alert("Error!!", err.toString());
+        setLoading(false);
+      }
+    };
+    FetchStockById();
+  }, []);
 
   const CallApi = async () => {
     const formData = new FormData();
@@ -140,8 +186,8 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
       } else if (response.status === 400) {
         Alert.alert("Error", json_response?.message);
       } else if (response.status === 200) {
-        Alert.alert("Success!", "Live stock added successfully.");
-        navigation.replace("Home");
+        Alert.alert("Success!", "Changes saved successfully.");
+        //   navigation.replace("Home");
       }
       setLoading(false);
     } catch (err) {
@@ -255,11 +301,30 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
     }
   };
 
+  const setPreValuesForTextInputs = (title: string) => {
+    if (title.includes("Lactation Stage")) {
+      return lactationMonth ? lactationMonth.toString() : "";
+    }
+    // } else if (title === "Purchase price") {
+    //   return purchasePrice ? purchasePrice : "";
+    // } else if (title.includes("Milk capacity")) {
+    //   return milkCapacity ? milkCapacity : "";
+    // } else if (title === "Parity") {
+    //   return parity ? parity : "";
+    // } else if (title === "Seller Details") {
+    //   return sellerDetails ? sellerDetails : "";
+    // } else if (title === "Qualities") {
+    //   return qualities ? qualities : "";
+    // } else if (title === "Food habits") {
+    //   return foodHabits ? foodHabits : "";
+    // }
+  };
+
   return (
     <View style={globalStyle.container}>
       <LoadingModal visible={loading} />
       <View style={globalStyle.subContainer}>
-        <Text style={globalStyle.pageHeadingStyle}>Add Live Stock</Text>
+        <Text style={globalStyle.pageHeadingStyle}>Manage Live Stock</Text>
         <View style={{ width: 100, height: 110, marginBottom: 20 }}>
           <Image
             source={
@@ -326,6 +391,7 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
                   placeholderTextColor="grey"
                   multiline={item.type == "text"}
                   keyboardType={item.type == "numeric" ? "numeric" : "default"}
+                  value={() => setPreValuesForTextInputs(item.title)}
                 ></TextInput>
               );
             } else if (item.type === "DROPDOWN" && item.title === "Breed") {
@@ -336,6 +402,7 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
                   data={breedChoices}
                   labelField="label"
                   valueField="value"
+                  value={breedValue}
                   placeholder="Select Breed"
                   search
                   searchPlaceholder="Search Breed here....."
@@ -358,6 +425,7 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
                   data={pregnancyStatusOptions}
                   labelField="label"
                   valueField="value"
+                  value={pregnacncyStatus}
                   placeholder="Pregnancy status"
                   placeholderStyle={{
                     fontWeight: "400",
@@ -436,4 +504,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddStock;
+export default ManageLiveStock;
