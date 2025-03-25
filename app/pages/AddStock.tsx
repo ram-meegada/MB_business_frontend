@@ -412,7 +412,7 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
               return null;
             }
           })}
-          <CustomButtonComponent onSubmit={CallApi} />
+          <CustomButtonComponent onSubmit={CallApi} buttonName="Submit" />
         </ScrollView>
       </View>
     </View>

@@ -1,17 +1,18 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ColorValue, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { thirdColor } from "@/constants/globalStyles";
+import { textColor, thirdColor } from "@/constants/globalStyles";
 
 type Props = {
   onSubmit: () => void;
+  buttonName: string;
 };
 
-const CustomButtonComponent: React.FC<Props> = ({ onSubmit }) => {
+const CustomButtonComponent: React.FC<Props> = ({ onSubmit, buttonName }) => {
   return (
     <Pressable
       onPress={onSubmit}
       style={{
-        backgroundColor: thirdColor,
+        backgroundColor: buttonName === "Delete" ? "red" : thirdColor,
         height: 50,
         width: 100,
         alignItems: "center",
@@ -19,7 +20,15 @@ const CustomButtonComponent: React.FC<Props> = ({ onSubmit }) => {
         borderRadius: 8,
       }}
     >
-      <Text style={{ fontSize: 18, fontWeight: "500" }}>Submit</Text>
+      <Text
+        style={{
+          fontSize: 18,
+          fontWeight: "500",
+          color: buttonName === "Delete" ? "white" : textColor,
+        }}
+      >
+        {buttonName}
+      </Text>
     </Pressable>
   );
 };

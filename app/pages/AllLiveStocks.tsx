@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   globalStyle,
   secondaryColor,
@@ -20,6 +20,7 @@ import { BASE_URL, LIST_STOCKS_ENDPOINT } from "@/constants/endpoints";
 import { BEARER_TOKEN } from "@/constants/common";
 import LoadingModal from "@/components/LoadingModal";
 import { AllLiveStocksProps } from "../navigationTypes";
+import { useFocusEffect } from "@react-navigation/native";
 
 type dataStructure = {
   id: number;
@@ -39,32 +40,33 @@ const AllLiveStocks: React.FC<Props> = ({ navigation }) => {
   const [data, setData] = useState<dataStructure[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const callAPI = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`${LIST_STOCKS_ENDPOINT}`, {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${BEARER_TOKEN}`,
-          },
-        });
-        console.log(response.status);
+  useFocusEffect(
+    useCallback(() => {
+      const callAPI = async () => {
+        try {
+          setLoading(true);
+          const response = await fetch(`${LIST_STOCKS_ENDPOINT}`, {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${BEARER_TOKEN}`,
+            },
+          });
 
-        if (response.ok) {
-          const json_response = await response.json();
-          setData(json_response.data);
-        } else {
-          Alert.alert("Error!", "Something went wrong");
+          if (response.ok) {
+            const json_response = await response.json();
+            setData(json_response.data);
+          } else {
+            Alert.alert("Error!", "Something went wrong");
+          }
+          setLoading(false);
+        } catch (err: any) {
+          Alert.alert("Error!!", err.toString());
+          setLoading(false);
         }
-        setLoading(false);
-      } catch (err: any) {
-        Alert.alert("Error!!", err.toString());
-        setLoading(false);
-      }
-    };
-    callAPI();
-  }, []);
+      };
+      callAPI();
+    }, [])
+  );
 
   function NavigateToManageStock(id: number) {
     navigation.navigate("ManageLiveStock", { id: id });

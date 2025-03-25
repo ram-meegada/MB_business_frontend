@@ -57,7 +57,7 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [lactationMonth, setLactationMonth] = useState(0);
   const [purchasePrice, setPurchasePrice] = useState(0);
-  const [milkCapacity, setMilkCapacity] = useState(2);
+  const [milkCapacity, setMilkCapacity] = useState<number | null>(null);
   const [parity, setParity] = useState(0);
   const [sellerDetails, setSellerDetails] = useState("");
   const [qualities, setQualities] = useState("");
@@ -117,6 +117,12 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
           setLastCalvingDate(temp_date);
           setDateOfBirth(temp_date_two);
           setLactationMonth(data.lactation_month);
+          setPurchasePrice(data.purchase_price);
+          setMilkCapacity(data.milk_capacity);
+          setParity(data.parity);
+          setSellerDetails(data.seller_details);
+          setQualities(data.qualities);
+          setFoodHabits(data.food_habits);
         } else {
           Alert.alert("Error!", "Something went wrong");
         }
@@ -170,8 +176,8 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
     // }
     try {
       setLoading(true);
-      const response = await fetch(ADD_STOCK_ENDPOINT, {
-        method: "POST",
+      const response = await fetch(`${STOCK_BY_ID_ENDPOINT}${id}/`, {
+        method: "PUT",
         body: formData,
         headers: {
           Authorization: `Bearer ${BEARER_TOKEN}`,
@@ -187,7 +193,34 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
         Alert.alert("Error", json_response?.message);
       } else if (response.status === 200) {
         Alert.alert("Success!", "Changes saved successfully.");
-        //   navigation.replace("Home");
+      }
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      Alert.alert("Error", err instanceof Error ? err.message : String(err));
+      console.log(err, "----errr-----");
+    }
+  };
+
+  const CallDeleteApi = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${STOCK_BY_ID_ENDPOINT}${id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${BEARER_TOKEN}`,
+          Accept: "application/json",
+        },
+      });
+      const json_response = await response.json();
+      console.log(json_response, "======");
+      if (response.status === 401) {
+        Alert.alert("Token expired", "Change token");
+      } else if (response.status === 400) {
+        Alert.alert("Error", json_response?.message);
+      } else if (response.status === 200) {
+        Alert.alert("Success!", json_response.message);
+        navigation.goBack();
       }
       setLoading(false);
     } catch (err) {
@@ -289,7 +322,7 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
     } else if (title === "Purchase price") {
       setPurchasePrice(parseFloat(text));
     } else if (title.includes("Milk capacity")) {
-      setMilkCapacity(parseFloat(text));
+      setMilkCapacity(text ? parseFloat(text) : null);
     } else if (title === "Parity") {
       setParity(parseInt(text));
     } else if (title === "Seller Details") {
@@ -304,20 +337,19 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
   const setPreValuesForTextInputs = (title: string) => {
     if (title.includes("Lactation Stage")) {
       return lactationMonth ? lactationMonth.toString() : "";
+    } else if (title === "Purchase price") {
+      return purchasePrice ? purchasePrice.toString() : "";
+    } else if (title.includes("Milk capacity")) {
+      return milkCapacity ? milkCapacity.toString() : "";
+    } else if (title === "Parity") {
+      return parity ? parity.toString() : "";
+    } else if (title === "Seller Details") {
+      return sellerDetails ? sellerDetails : "";
+    } else if (title === "Qualities") {
+      return qualities ? qualities : "";
+    } else if (title === "Food habits") {
+      return foodHabits ? foodHabits : "";
     }
-    // } else if (title === "Purchase price") {
-    //   return purchasePrice ? purchasePrice : "";
-    // } else if (title.includes("Milk capacity")) {
-    //   return milkCapacity ? milkCapacity : "";
-    // } else if (title === "Parity") {
-    //   return parity ? parity : "";
-    // } else if (title === "Seller Details") {
-    //   return sellerDetails ? sellerDetails : "";
-    // } else if (title === "Qualities") {
-    //   return qualities ? qualities : "";
-    // } else if (title === "Food habits") {
-    //   return foodHabits ? foodHabits : "";
-    // }
   };
 
   return (
@@ -391,7 +423,7 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
                   placeholderTextColor="grey"
                   multiline={item.type == "text"}
                   keyboardType={item.type == "numeric" ? "numeric" : "default"}
-                  value={() => setPreValuesForTextInputs(item.title)}
+                  value={setPreValuesForTextInputs(item.title)}
                 ></TextInput>
               );
             } else if (item.type === "DROPDOWN" && item.title === "Breed") {
@@ -480,7 +512,15 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
               return null;
             }
           })}
-          <CustomButtonComponent onSubmit={CallApi} />
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <CustomButtonComponent onSubmit={CallApi} buttonName="Save" />
+            <CustomButtonComponent
+              onSubmit={CallDeleteApi}
+              buttonName="Delete"
+            />
+          </View>
         </ScrollView>
       </View>
     </View>
