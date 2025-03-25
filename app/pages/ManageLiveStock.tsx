@@ -198,7 +198,7 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
     } catch (err) {
       setLoading(false);
       Alert.alert("Error", err instanceof Error ? err.message : String(err));
-      console.log(err, "----errr-----");
+      console.log(err, "----errr---");
     }
   };
 
