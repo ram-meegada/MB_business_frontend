@@ -42,7 +42,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       title: "Expenditure",
       backgroundImage: require("../../assets/images/expenditure.png"),
       audio: require("../../assets/audio/captain_jacksparrow.mp3"),
-      navigateTo: "AddStock",
+      navigateTo: "ExpenditurePage",
     },
     {
       title: "Manage Stock",

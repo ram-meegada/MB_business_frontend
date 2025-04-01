@@ -134,6 +134,7 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
         },
       });
       const json_response = await response.json();
+      
       console.log(json_response, "======");
       if (response.status === 401) {
         Alert.alert("Token expired", "Change token");

@@ -55,7 +55,10 @@ const AllLiveStocks: React.FC<Props> = ({ navigation }) => {
           if (response.ok) {
             const json_response = await response.json();
             setData(json_response.data);
-          } else {
+          } else if (response.status === 401) {
+            Alert.alert("Error!", "Change the token");
+          }
+          else {
             Alert.alert("Error!", "Something went wrong");
           }
           setLoading(false);

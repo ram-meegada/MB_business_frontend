@@ -8,6 +8,7 @@ import FourthPage from "../pages/FourthPage";
 import AddStock from "../pages/AddStock";
 import AllLiveStocks from "../pages/AllLiveStocks";
 import ManageLiveStock from "../pages/ManageLiveStock";
+import ExpenditurePage from "../pages/ExpenditurePage";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -41,6 +42,11 @@ const App = () => {
       <Stack.Screen
         name="ManageLiveStock"
         component={ManageLiveStock}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ExpenditurePage"
+        component={ExpenditurePage}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
