@@ -36,7 +36,7 @@ const ThirdPage: React.FC<Props> = ({ navigation }) => {
             width: 300,
             borderRadius: 150,
           }}
-          source={require("../../assets/images/RR.jpeg")}
+          source={require("../../assets/images/brand_logo2.png")}
         />
         <Animated.View style={{ transform: [{ translateY }] }}>
           <Text style={{ fontSize: 24 }}>

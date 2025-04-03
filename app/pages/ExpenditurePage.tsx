@@ -50,8 +50,11 @@ const ExpenditurePage = () => {
           multiline={false}
           keyboardType="numeric"
           onTextChange={(text) => {
-            const floatText = parseFloat(text);
-            setPayload({ ...payload, amount: floatText });
+            
+            if (typeof(text) === "string") {
+              const float_text = parseFloat(text)
+              setPayload({ ...payload, amount: float_text });
+            } 
           }}
         />
         {errors.amount ? <Text>{errors.amount}</Text> : null}

@@ -28,6 +28,9 @@ const APICall = async (
     } else if ([200, 201].includes(response.status)) {
       Alert.alert("Success!", json_response?.message);
     }
+    else {
+        Alert.alert("Warning!", 'response not handled');
+    }
   } catch (err) {
     Alert.alert("Error", String(err));
   }
