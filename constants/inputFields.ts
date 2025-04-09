@@ -72,12 +72,3 @@ export const pregnancyStatusOptions = [
     { label: "Yes", value: "yes" },
     { label: "No", value: "no" },
   ];
-
-
-export const expenditureChoices = [
-  { label: 'Feed', value: 'feed' },
-  { label: 'Medicine', value: 'medicine' },
-  { label: 'Equipment', value: 'equipment' },
-  { label: 'Maintenance', value: 'maintenance' },
-  { label: 'Other', value: 'other' }
-]

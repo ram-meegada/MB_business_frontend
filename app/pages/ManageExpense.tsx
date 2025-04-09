@@ -1,11 +1,4 @@
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
   globalStyle,
@@ -23,17 +16,16 @@ import {
 } from "@/constants/endpoints";
 import SectionDropDownComponent from "@/components/sectionDropDownComponent";
 import PieChartComponent from "@/components/PieChartComponent";
-import { ExpenditurePageProps } from "../navigationTypes";
+import {
+  ExpenditurePageProps,
+  ManageExpenditurePageProps,
+} from "../navigationTypes";
+import { RouteProp, useRoute } from "@react-navigation/native";
 
 type PAYLOAD = {
   amount?: number;
   category?: number;
   description?: string | number;
-};
-
-type errorProps = {
-  amount: string;
-  category: string;
 };
 
 type expenseProps = {
@@ -42,11 +34,19 @@ type expenseProps = {
 };
 
 type Props = {
-  navigation: ExpenditurePageProps
-}
+  navigation: ManageExpenditurePageProps;
+};
 
+type RootStackParamList = {
+  ManageExpenditurePage: { id: string };
+};
 
-const ExpenditurePage = ({ navigation }: Props) => {
+type ManageExpenditureRoute = RouteProp<
+  RootStackParamList,
+  "ManageExpenditurePage"
+>;
+
+const ManageExpenditurePage = ({ navigation }: Props) => {
   const defaultErrors = {
     amount: "",
     category: "",
@@ -56,26 +56,28 @@ const ExpenditurePage = ({ navigation }: Props) => {
   const [payload, setPayload] = useState<PAYLOAD>();
   const [expenseOptions, setExpenseOptions] = useState<expenseProps[]>([]);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<errorProps>(defaultErrors);
 
-  const AddExpenditure = async () => {
-    setLoading(true);
-    const response = await APICall({
-      method: "POST",
-      Accept: "application/json",
-      contentType: "application/json",
-      endPoint: ADD_EXPENDITURE,
-      formData: payload,
-      showToast: true,
-    });
-    setLoading(false);
-  };
+  const route = useRoute<ManageExpenditureRoute>();
+  const { id } = route.params;
+
+//   const AddExpenditure = async () => {
+//     setLoading(true);
+//     const response = await APICall({
+//       method: "POST",
+//       Accept: "application/json",
+//       contentType: "application/json",
+//       endPoint: ADD_EXPENDITURE,
+//       formData: payload,
+//       showToast: true,
+//     });
+//     setLoading(false);
+//   };
 
   return (
     <View style={globalStyle.container}>
       <LoadingModal visible={loading} />
       <View style={[globalStyle.subContainer]}>
-        <Text style={globalStyle.pageHeadingStyle}>Add Expenditure</Text>
+        <Text style={globalStyle.pageHeadingStyle}>Manage Expenditure</Text>
         <TextInputComponent
           placeHolder="Amount"
           multiline={false}
@@ -87,7 +89,6 @@ const ExpenditurePage = ({ navigation }: Props) => {
             }
           }}
         />
-        {errors.amount ? <Text>{errors.amount}</Text> : null}
         <DropDownTsxComponent
           data={expenseOptions}
           placeHolder="Select Reason"
@@ -101,28 +102,12 @@ const ExpenditurePage = ({ navigation }: Props) => {
           keyboardType="default"
           onTextChange={(text) => setPayload({ ...payload, description: text })}
         />
-        <CustomButtonComponent onSubmit={AddExpenditure} buttonName="Submit" />
-        <Pressable
-          onPress={() => navigation.navigate("RecentExpenses")}
-          style={[
-            {
-              height: 50,
-              backgroundColor: thirdColor,
-              marginTop: 10,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 8,
-            },
-            globalStyle.shadowEffect,
-          ]}
-        >
-          <Text style={{ fontSize: 22 }}>View Recent Expenditures</Text>
-        </Pressable>
+        {/* <CustomButtonComponent onSubmit={AddExpenditure} buttonName="Save" /> */}
       </View>
     </View>
   );
 };
 
-export default ExpenditurePage;
+export default ManageExpenditurePage;
 
 const styles = StyleSheet.create({});

@@ -6,6 +6,13 @@ export const thirdColor = '#05d5ff'
 export const sideHeadingColor = '#333232'
 export const textColor = "black"
 export const placeHolderColor = "grey"
+export const redVariant = "red"
+
+
+export const dominantRed = "#F44336"
+export const softLightPink = "#FCECEC"
+export const pureWhite = "#FFFFFF"
+export const lightGray = "#E0E0E0"
 
 
 export const globalStyle = StyleSheet.create({
@@ -27,5 +34,12 @@ export const globalStyle = StyleSheet.create({
         backgroundColor: secondaryColor,
         paddingLeft: 10,
         color: "black",
+      },
+      shadowEffect: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
       }
 })

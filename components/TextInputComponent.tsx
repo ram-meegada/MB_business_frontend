@@ -17,6 +17,7 @@ type Props = {
   multiline: boolean;
   keyboardType: KeyboardTypeOptions;
   onTextChange: (text: number | string) => void;
+  value?: string
 };
 
 const TextInputComponent: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const TextInputComponent: React.FC<Props> = ({
   multiline,
   keyboardType,
   onTextChange,
+  value=""
 }) => {
   const [textHighlight, setTextHighlight] = useState(false);
   return (
@@ -34,6 +36,8 @@ const TextInputComponent: React.FC<Props> = ({
         {
           borderColor: textHighlight ? thirdColor : "transparent",
           borderWidth: textHighlight ? 2 : 0,
+          height: multiline ? 100 : globalStyle.textInputStyle.height,
+          textAlignVertical: multiline ? 'top' : 'auto'
         },
       ]}
       onChangeText={(text) => onTextChange(text)}
@@ -41,6 +45,7 @@ const TextInputComponent: React.FC<Props> = ({
       placeholderTextColor="grey"
       multiline={multiline}
       keyboardType={keyboardType}
+      value={value}
     />
   );
 };

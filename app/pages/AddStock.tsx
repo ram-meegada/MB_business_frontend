@@ -109,7 +109,6 @@ const AddStock: React.FC<Props> = ({ navigation }) => {
     formData.append("qualities", qualities);
     formData.append("food_habits", foodHabits);
 
-    console.log(formData, "--------fromadata------------");
     // if (validatePayload()) {
     //   for (let err of Object.entries(errors)) {
     //     console.log(err, "-----err----");

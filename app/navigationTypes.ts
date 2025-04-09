@@ -7,7 +7,10 @@ export type RootStackNavigationList = {
     ThirdPage: undefined,
     AddStock: undefined,
     ManageLiveStock: {id:number},
-    AllLiveStocks: undefined
+    AllLiveStocks: undefined,
+    RecentExpenses: undefined,
+    ExpenditurePage: undefined,
+    ManageExpenditurePage: {id: number}
 }
 
 export type homePageProps = NativeStackNavigationProp<RootStackNavigationList, "Home">;
@@ -16,3 +19,6 @@ export type ThirdPageProps = NativeStackNavigationProp<RootStackNavigationList, 
 export type AddStockProps = NativeStackNavigationProp<RootStackNavigationList, "AddStock">;
 export type ManageLiveStockProps = NativeStackNavigationProp<RootStackNavigationList, "ManageLiveStock">;
 export type AllLiveStocksProps = NativeStackNavigationProp<RootStackNavigationList, "AllLiveStocks">;
+export type RecentExpensesProps = NativeStackNavigationProp<RootStackNavigationList, "RecentExpenses">;
+export type ExpenditurePageProps = NativeStackNavigationProp<RootStackNavigationList, "ExpenditurePage">;
+export type ManageExpenditurePageProps = NativeStackNavigationProp<RootStackNavigationList, "ManageExpenditurePage">;
