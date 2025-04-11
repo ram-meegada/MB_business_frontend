@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import {
   globalStyle,
   secondaryColor,
+  softLightPink,
   thirdColor,
 } from "@/constants/globalStyles";
 import TextInputComponent from "@/components/TextInputComponent";
@@ -71,6 +72,21 @@ const ExpenditurePage = ({ navigation }: Props) => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    const FetchExpenseOptions = async () => {
+      setLoading(true);
+      const response = await APICall({
+        method: "GET",
+        Accept: "application/json",
+        endPoint: FETCH_EXPENDITURE_CATEGORIES,
+        showToast: false,
+      });
+      setExpenseOptions(response);
+      setLoading(false);
+    };
+    FetchExpenseOptions();
+  }, []);
+
   return (
     <View style={globalStyle.container}>
       <LoadingModal visible={loading} />
@@ -107,7 +123,7 @@ const ExpenditurePage = ({ navigation }: Props) => {
           style={[
             {
               height: 50,
-              backgroundColor: thirdColor,
+              backgroundColor: softLightPink,
               marginTop: 10,
               alignItems: "center",
               justifyContent: "center",
@@ -118,6 +134,7 @@ const ExpenditurePage = ({ navigation }: Props) => {
         >
           <Text style={{ fontSize: 22 }}>View Recent Expenditures</Text>
         </Pressable>
+        <PieChartComponent></PieChartComponent>
       </View>
     </View>
   );

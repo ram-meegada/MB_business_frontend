@@ -9,5 +9,10 @@ export const STOCK_BY_ID_ENDPOINT = BASE_URL + LIVE_STOCK_COMMON_ENDPOINT
 
 // Endpoints for Expenditure
 const EXPENDITURE_COMMON_ENDPOINT = "expenditure/"
+
+// Endpoints for Expenditure categories
 export const ADD_EXPENDITURE = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + ''
 export const FETCH_EXPENDITURE_CATEGORIES = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + 'category/'
+
+// 
+export const FETCH_EXPENDITURE_BY_ID = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + 'manage/'

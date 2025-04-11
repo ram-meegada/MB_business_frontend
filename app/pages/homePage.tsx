@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import { homePageProps } from "../navigationTypes";
 import { globalStyle, secondaryColor } from "@/constants/globalStyles";
+import PieChartComponent from "@/components/PieChartComponent";
 
 type Props = {
   navigation: homePageProps;
@@ -47,6 +48,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     {
       title: "Manage Stock",
       backgroundImage: require("../../assets/images/manage_stock.png"),
+      audio: require("../../assets/audio/captain_jacksparrow.mp3"),
+      navigateTo: "AllLiveStocks",
+    },
+    {
+      title: "Analytics",
+      backgroundImage: require("../../assets/images/analytics.png"),
       audio: require("../../assets/audio/captain_jacksparrow.mp3"),
       navigateTo: "AllLiveStocks",
     },

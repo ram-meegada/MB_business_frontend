@@ -1,17 +1,25 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { globalStyle, secondaryColor } from "@/constants/globalStyles";
 import APICall from "@/utils/CallApi";
 import { ADD_EXPENDITURE } from "@/constants/endpoints";
 import LoadingModal from "@/components/LoadingModal";
 import { RecentExpensesProps } from "../navigationTypes";
+import { useFocusEffect } from "@react-navigation/native";
+
+
+type categoryProps = {
+  id: number,
+  parent: string,
+  parent_id: number,
+  name: string
+}
 
 type recentExpensesProps = {
   id: number;
   amount?: number;
-  category?: number;
+  category?: categoryProps;
   description?: string;
-  sub_category?: string;
   created_at?: string;
 };
 
@@ -26,21 +34,23 @@ const RecentExpenses = ({ navigation }: Props) => {
   const [loading, setLoading] = useState(false);
   const [numberOfLines, setNumberOfLines] = useState(0)
 
-  useEffect(() => {
-    const FetchRecentExpenses = async () => {
-      setLoading(true);
+  useFocusEffect(
+    useCallback(() => {
+      const FetchRecentExpenses = async () => {
+        setLoading(true);
 
-      const response = await APICall({
-        method: "GET",
-        Accept: "application/json",
-        endPoint: ADD_EXPENDITURE,
-        showToast: false,
-      });
-      setRecentExpenses(response);
-      setLoading(false);
-    };
-    FetchRecentExpenses();
-  }, []);
+        const response = await APICall({
+          method: "GET",
+          Accept: "application/json",
+          endPoint: ADD_EXPENDITURE,
+          showToast: false,
+        });
+        setRecentExpenses(response);
+        setLoading(false);
+      };
+      FetchRecentExpenses();
+    }, [])
+  )
 
   const onDescClick = (id:number) => {
     id === numberOfLines ? setNumberOfLines(0) : setNumberOfLines(id)
@@ -70,7 +80,7 @@ const RecentExpenses = ({ navigation }: Props) => {
               ]}
             >
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {item.sub_category} ({item.category})
+                {item.category?.name} ({item.category?.parent})
               </Text>
               <Text style={{ fontSize: 16, fontWeight: "bold" }}>
                 {item.amount} /-

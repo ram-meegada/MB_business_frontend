@@ -8,7 +8,8 @@ type Props = {
   placeHolder: string;
   search: boolean;
   searchPlaceholder: string;
-  optionSelected: (text: number) => void;
+  optionSelected: (id: number, text: string) => void;
+  value?: string
 };
 
 const DropDownTsxComponent = ({
@@ -17,6 +18,7 @@ const DropDownTsxComponent = ({
   search,
   searchPlaceholder,
   optionSelected,
+  value
 }: Props) => {
   return (
     <Dropdown
@@ -24,6 +26,7 @@ const DropDownTsxComponent = ({
       data={data}
       labelField="label"
       valueField="value"
+      value={value}
       placeholder={placeHolder}
       search={search}
       searchPlaceholder={searchPlaceholder}
@@ -34,7 +37,7 @@ const DropDownTsxComponent = ({
       }}
       onChange={(text) => {
         if (text?.isHeader === undefined) {
-          optionSelected(text.id);
+          optionSelected(text.id, text.value);
         }
       }}
       renderItem={(item) => {

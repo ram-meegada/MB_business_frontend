@@ -12,6 +12,7 @@ import APICall from "@/utils/CallApi";
 import LoadingModal from "@/components/LoadingModal";
 import {
   ADD_EXPENDITURE,
+  FETCH_EXPENDITURE_BY_ID,
   FETCH_EXPENDITURE_CATEGORIES,
 } from "@/constants/endpoints";
 import SectionDropDownComponent from "@/components/sectionDropDownComponent";
@@ -24,7 +25,8 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 
 type PAYLOAD = {
   amount?: number;
-  category?: number;
+  category?: string;
+  category_id?: number;
   description?: string | number;
 };
 
@@ -60,18 +62,67 @@ const ManageExpenditurePage = ({ navigation }: Props) => {
   const route = useRoute<ManageExpenditureRoute>();
   const { id } = route.params;
 
-//   const AddExpenditure = async () => {
-//     setLoading(true);
-//     const response = await APICall({
-//       method: "POST",
-//       Accept: "application/json",
-//       contentType: "application/json",
-//       endPoint: ADD_EXPENDITURE,
-//       formData: payload,
-//       showToast: true,
-//     });
-//     setLoading(false);
-//   };
+  const UpdateExpenditure = async () => {
+    setLoading(true);
+    const payload_new = {...payload, category: payload?.category_id}
+    const response = await APICall({
+      method: "PUT",
+      Accept: "application/json",
+      contentType: "application/json",
+      endPoint: FETCH_EXPENDITURE_BY_ID + `${id}/`,
+      formData: payload_new,
+      showToast: true,
+    });
+    setLoading(false);
+  };
+
+  const DeleteExpenditure = async () => {
+    setLoading(true);
+    const response = await APICall({
+      method: "DELETE",
+      Accept: "application/json",
+      endPoint: FETCH_EXPENDITURE_BY_ID + `${id}/`,
+      showToast: true,
+    });
+    setLoading(false);
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    const FetchExpenseById = async () => {
+      setLoading(true);
+      const response = await APICall({
+        method: "GET",
+        Accept: "application/json",
+        endPoint: FETCH_EXPENDITURE_BY_ID + `${id}/`,
+        showToast: false,
+      });
+      setPayload({
+        category: response.category.name,
+        category_id: response.category.id,
+        amount: response.amount,
+        description: response.description,
+      });
+      
+      setLoading(false);
+    };
+    FetchExpenseById();
+  }, []);
+
+  useEffect(() => {
+    const FetchExpenseCategories = async () => {
+      setLoading(true);
+      const response = await APICall({
+        method: "GET",
+        Accept: "application/json",
+        endPoint: FETCH_EXPENDITURE_CATEGORIES,
+        showToast: false,
+      });
+      setExpenseOptions(response);
+      setLoading(false);
+    };
+    FetchExpenseCategories();
+  }, []);
 
   return (
     <View style={globalStyle.container}>
@@ -81,7 +132,9 @@ const ManageExpenditurePage = ({ navigation }: Props) => {
         <TextInputComponent
           placeHolder="Amount"
           multiline={false}
+          value={payload?.amount}
           keyboardType="numeric"
+          fieldType="number"
           onTextChange={(text) => {
             if (typeof text === "string") {
               const float_text = parseFloat(text);
@@ -92,17 +145,30 @@ const ManageExpenditurePage = ({ navigation }: Props) => {
         <DropDownTsxComponent
           data={expenseOptions}
           placeHolder="Select Reason"
+          value={payload?.category}
           search={true}
           searchPlaceholder="Search reason here..."
-          optionSelected={(text) => setPayload({ ...payload, category: text })}
+          optionSelected={(id, text) =>
+            setPayload({ ...payload, category_id: id,  category: text})
+          }
         />
         <TextInputComponent
           placeHolder="Description"
           multiline={true}
           keyboardType="default"
+          value={payload?.description}
           onTextChange={(text) => setPayload({ ...payload, description: text })}
         />
-        {/* <CustomButtonComponent onSubmit={AddExpenditure} buttonName="Save" /> */}
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <CustomButtonComponent
+            onSubmit={UpdateExpenditure}
+            buttonName="Update"
+          />
+          <CustomButtonComponent
+            onSubmit={DeleteExpenditure}
+            buttonName="Delete"
+          />
+        </View>
       </View>
     </View>
   );

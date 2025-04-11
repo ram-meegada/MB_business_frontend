@@ -10,7 +10,7 @@ export const redVariant = "red"
 
 
 export const dominantRed = "#F44336"
-export const softLightPink = "#FCECEC"
+export const softLightPink = "#f0b4ee"
 export const pureWhite = "#FFFFFF"
 export const lightGray = "#E0E0E0"
 

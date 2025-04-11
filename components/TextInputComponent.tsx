@@ -17,7 +17,8 @@ type Props = {
   multiline: boolean;
   keyboardType: KeyboardTypeOptions;
   onTextChange: (text: number | string) => void;
-  value?: string
+  value?: string | number;
+  fieldType?: string
 };
 
 const TextInputComponent: React.FC<Props> = ({
@@ -25,11 +26,18 @@ const TextInputComponent: React.FC<Props> = ({
   multiline,
   keyboardType,
   onTextChange,
-  value=""
+  value,
+  fieldType
 }) => {
   const [textHighlight, setTextHighlight] = useState(false);
+
+  if (fieldType=="number" && value !== undefined && isNaN(Number(value))) {
+    value = ""
+  }
+  
   return (
     <TextInput
+      value={value !== undefined ? value.toString() : undefined}
       onFocus={() => setTextHighlight(true)}
       style={[
         globalStyle.textInputStyle,
@@ -45,7 +53,6 @@ const TextInputComponent: React.FC<Props> = ({
       placeholderTextColor="grey"
       multiline={multiline}
       keyboardType={keyboardType}
-      value={value}
     />
   );
 };
