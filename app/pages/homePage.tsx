@@ -55,7 +55,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       title: "Analytics",
       backgroundImage: require("../../assets/images/analytics.png"),
       audio: require("../../assets/audio/captain_jacksparrow.mp3"),
-      navigateTo: "AllLiveStocks",
+      navigateTo: "AnalyticsListScreen",
     },
   ];
   const [sound, setSound] = useState<Audio.Sound | null>(null);

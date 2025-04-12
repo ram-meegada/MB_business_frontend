@@ -7,13 +7,12 @@ import LoadingModal from "@/components/LoadingModal";
 import { RecentExpensesProps } from "../navigationTypes";
 import { useFocusEffect } from "@react-navigation/native";
 
-
 type categoryProps = {
-  id: number,
-  parent: string,
-  parent_id: number,
-  name: string
-}
+  id: number;
+  parent: string;
+  parent_id: number;
+  name: string;
+};
 
 type recentExpensesProps = {
   id: number;
@@ -32,7 +31,7 @@ const RecentExpenses = ({ navigation }: Props) => {
     []
   );
   const [loading, setLoading] = useState(false);
-  const [numberOfLines, setNumberOfLines] = useState(0)
+  const [numberOfLines, setNumberOfLines] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -50,15 +49,15 @@ const RecentExpenses = ({ navigation }: Props) => {
       };
       FetchRecentExpenses();
     }, [])
-  )
+  );
 
-  const onDescClick = (id:number) => {
-    id === numberOfLines ? setNumberOfLines(0) : setNumberOfLines(id)
+  const onDescClick = (id: number) => {
+    id === numberOfLines ? setNumberOfLines(0) : setNumberOfLines(id);
   };
 
   const onNavigation = (id: number) => {
-    navigation.navigate('ManageExpenditurePage', {id: id})
-  }
+    navigation.navigate("ManageExpenditurePage", { id: id });
+  };
 
   return (
     <View style={globalStyle.container}>
@@ -83,9 +82,9 @@ const RecentExpenses = ({ navigation }: Props) => {
                 {item.category?.name} ({item.category?.parent})
               </Text>
               <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                {item.amount} /-
+                ₹{item.amount}
               </Text>
-              <Pressable onPress={() => onDescClick(item.id)} style={{  }}>
+              <Pressable onPress={() => onDescClick(item.id)} style={{}}>
                 <Text
                   numberOfLines={item.id === numberOfLines ? 0 : 3}
                   style={{ fontSize: 14 }}

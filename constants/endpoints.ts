@@ -1,5 +1,5 @@
 export const BASE_URL = "http://192.168.1.7:8001/"
-
+// 192.168.121.125  192.168.1.7
 // Endpoints for Livestock
 const LIVE_STOCK_COMMON_ENDPOINT = "live-stock/"
 export const ADD_STOCK_ENDPOINT = BASE_URL + LIVE_STOCK_COMMON_ENDPOINT + 'add/'

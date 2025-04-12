@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Pressable,
   ScrollView,
@@ -74,15 +75,24 @@ const ExpenditurePage = ({ navigation }: Props) => {
 
   useEffect(() => {
     const FetchExpenseOptions = async () => {
-      setLoading(true);
-      const response = await APICall({
-        method: "GET",
-        Accept: "application/json",
-        endPoint: FETCH_EXPENDITURE_CATEGORIES,
-        showToast: false,
-      });
-      setExpenseOptions(response);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const response = await APICall({
+          method: "GET",
+          Accept: "application/json",
+          endPoint: FETCH_EXPENDITURE_CATEGORIES,
+          showToast: false,
+        });
+        if (response) {
+          setExpenseOptions(response);
+        }
+      }
+      catch (err) {
+        Alert.alert(String(err))
+      }
+      finally {
+        setLoading(false);
+      }
     };
     FetchExpenseOptions();
   }, []);
@@ -134,7 +144,6 @@ const ExpenditurePage = ({ navigation }: Props) => {
         >
           <Text style={{ fontSize: 22 }}>View Recent Expenditures</Text>
         </Pressable>
-        <PieChartComponent></PieChartComponent>
       </View>
     </View>
   );

@@ -3,6 +3,7 @@ import { StyleSheet, StatusBar } from "react-native";
 
 export const secondaryColor = '#b0e0e6'
 export const thirdColor = '#05d5ff'
+
 export const sideHeadingColor = '#333232'
 export const textColor = "black"
 export const placeHolderColor = "grey"

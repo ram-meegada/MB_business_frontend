@@ -10,7 +10,9 @@ export type RootStackNavigationList = {
     AllLiveStocks: undefined,
     RecentExpenses: undefined,
     ExpenditurePage: undefined,
-    ManageExpenditurePage: {id: number}
+    ManageExpenditurePage: {id: number},
+    AnalyticsListScreen: undefined,
+    ExpenditureAnalytics: undefined
 }
 
 export type homePageProps = NativeStackNavigationProp<RootStackNavigationList, "Home">;
@@ -22,3 +24,4 @@ export type AllLiveStocksProps = NativeStackNavigationProp<RootStackNavigationLi
 export type RecentExpensesProps = NativeStackNavigationProp<RootStackNavigationList, "RecentExpenses">;
 export type ExpenditurePageProps = NativeStackNavigationProp<RootStackNavigationList, "ExpenditurePage">;
 export type ManageExpenditurePageProps = NativeStackNavigationProp<RootStackNavigationList, "ManageExpenditurePage">;
+export type AnalyticsListScreenProps = NativeStackNavigationProp<RootStackNavigationList, "AnalyticsListScreen">;

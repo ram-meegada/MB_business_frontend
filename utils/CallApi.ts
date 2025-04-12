@@ -56,6 +56,7 @@ const APICall = async ({
     return json_response.data
   } catch (err) {
     Alert.alert("Error", String(err));
+    return null
   }
 };
 

@@ -11,6 +11,8 @@ import ManageLiveStock from "../pages/ManageLiveStock";
 import ExpenditurePage from "../pages/ExpenditurePage";
 import RecentExpenses from "../pages/RecentExpenses";
 import ManageExpenditurePage from "../pages/ManageExpense";
+import AnalyticsListScreen from "../pages/AnalyticsListScreen";
+import ExpenditureAnalytics from "../pages/ExpenditureAnalytics";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -59,6 +61,16 @@ const App = () => {
       <Stack.Screen
         name="ManageExpenditurePage"
         component={ManageExpenditurePage}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AnalyticsListScreen"
+        component={AnalyticsListScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ExpenditureAnalytics"
+        component={ExpenditureAnalytics}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
