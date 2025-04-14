@@ -1,4 +1,4 @@
-export const BASE_URL = "http://192.168.1.7:8001/"
+export const BASE_URL = "http://192.168.1.14:8001/"
 // 192.168.121.125  192.168.1.7
 // Endpoints for Livestock
 const LIVE_STOCK_COMMON_ENDPOINT = "live-stock/"
@@ -16,3 +16,4 @@ export const FETCH_EXPENDITURE_CATEGORIES = BASE_URL + EXPENDITURE_COMMON_ENDPOI
 
 // 
 export const FETCH_EXPENDITURE_BY_ID = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + 'manage/'
+export const FETCH_EXPENDITURE_GRAPH_DATA = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + 'analytics/'

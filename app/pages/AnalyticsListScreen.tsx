@@ -28,7 +28,7 @@ const AnalyticsListScreen = ({ navigation }: Props) => {
         {AnalyticsList.map((value, index) => (
           <Pressable
             key={index}
-            onPress={() => navigation.navigate(value.navigateTo)}
+            onPress={() => navigation.navigate(value.navigateTo as never)}
             style={[
               {
                 height: 50,

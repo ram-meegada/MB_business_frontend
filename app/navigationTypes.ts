@@ -12,7 +12,7 @@ export type RootStackNavigationList = {
     ExpenditurePage: undefined,
     ManageExpenditurePage: {id: number},
     AnalyticsListScreen: undefined,
-    ExpenditureAnalytics: undefined
+    ExpenditureAnalytics: undefined,
 }
 
 export type homePageProps = NativeStackNavigationProp<RootStackNavigationList, "Home">;

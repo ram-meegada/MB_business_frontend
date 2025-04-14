@@ -1,5 +1,5 @@
 import { BarChart } from "react-native-chart-kit";
-import { Dimensions, ScrollView } from "react-native";
+import { Dimensions, ScrollView, Text, View } from "react-native";
 import {
   secondaryColor,
   softLightPink,
@@ -9,69 +9,66 @@ import {
 const screenWidth = Dimensions.get("window").width;
 
 type Props = {
-    labels: string[];
+  Xaxis_labels: string[];
+  Yaxis_values: number[]
+};
 
-}
-
-const BarChartComponent = () => {
+const BarChartComponent = ({ Xaxis_labels=[], Yaxis_values=[] }: Props) => {
   const data = {
-    labels: [
-      "FEED",
-      "MEDC",
-      "MNTC",
-      "TRANS",
-      "LABOR",
-      "EQPT",
-      "UTIL",
-      "MRKTG",
-      "INSRC",
-      "LOAN",
-      "OTHER",
-    ],
+    labels: Xaxis_labels,
     // labels: ['Medicine', 'Equipment', 'Maintenance', 'Labour', 'Transportation', 'Utilities', 'Marketing', 'Insurance', 'Loan Repayment', 'Other', 'Feed'],
     datasets: [
       {
-        data: [
-          4000, 2000, 1500, 3000, 6000, 10000, 2000, 1500, 3000, 6000, 10000,
-        ],
+        data: Yaxis_values,
       },
     ],
   };
+  
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <BarChart
-        data={data}
-        width={data.labels.length * 60} // Dynamic width based on number of labels
-        height={250}
-        fromZero
-        yAxisLabel="₹"
-        yAxisSuffix=""
-        // verticalLabelRotation={10}
-        chartConfig={{
-          fillShadowGradient: thirdColor,
-          fillShadowGradientOpacity: 1,
-          backgroundColor: softLightPink,
-          backgroundGradientFrom: softLightPink,
-          backgroundGradientTo: softLightPink,
-          decimalPlaces: 0,
-          color: () => thirdColor,
-          labelColor: () => "#333",
-          propsForBackgroundLines: {
-            stroke: "none",
-          },
-          propsForVerticalLabels: {
-            fontSize: 10,
-          },
-        }}
-        style={{
-          marginVertical: 10,
-          //   paddingBottom: 30
-          borderRadius: 12,
-          borderColor: thirdColor,
-          borderWidth: 2,
-        }}
-      />
-    </ScrollView>
+    <View>
+        {Xaxis_labels.length != 0 && Yaxis_values.length != 0 && Xaxis_labels.length === Yaxis_values.length ? 
+          (<BarChart
+            data={data}
+            width={345} 
+            height={250}
+            fromZero
+            yAxisLabel="₹"
+            yAxisSuffix=""
+            verticalLabelRotation={20}
+            showValuesOnTopOfBars={true}
+            showBarTops={true}
+            chartConfig={{
+              barPercentage: 0.2,
+              fillShadowGradient: "transparent",
+              fillShadowGradientOpacity: 1,
+              backgroundGradientFrom: "yellow",
+              backgroundGradientFromOpacity: 1,
+              backgroundGradientTo: "lightyellow",
+              backgroundGradientToOpacity: 1,
+              decimalPlaces: 0,
+              color: () => "red",
+              labelColor: () => "#333",
+              propsForBackgroundLines: {
+                stroke: "none",
+              },
+              propsForVerticalLabels: {
+                fontSize: 12,
+                transform: [ { translateX: -9 }, { translateY: -8 }],
+              },
+              propsForHorizontalLabels: {
+                fontSize: 12,
+                transform: [ { translateX: 0 }]
+              }
+            }}
+            style={{
+              marginVertical: 10,
+              //   paddingBottom: 30
+              borderRadius: 12,
+              //   borderColor: thirdColor,
+              //   borderWidth: 2,
+            }}
+          />) : (<Text style={{ alignSelf: 'center', margin: 5 }}>No Bar chart data available</Text>)}
+    </View>
   );
 };
 
