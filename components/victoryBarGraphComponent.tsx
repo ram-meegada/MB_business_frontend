@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Dimensions } from "react-native";
 import {
   VictoryBar,
@@ -12,15 +12,18 @@ import {
   softLightPink,
   thirdColor,
 } from "@/constants/globalStyles";
+import { dataProps } from "@/app/pages/ExpenditureAnalytics";
 
 const screenWidth = Dimensions.get("window").width;
 
 type Props = {
-  formattedData: { x: string; y: number }[];
+  formattedData: dataProps;
 };
 
 const VictoryBarChartComponent = ({ formattedData }: Props) => {
-  if (formattedData.length === 0) {
+  const [ selectedBar, setSelectedBar ] = useState("")
+
+  if (Object.keys(formattedData).length === 0) {
     return <Text>No data available</Text>;
   }
 
@@ -33,6 +36,22 @@ const VictoryBarChartComponent = ({ formattedData }: Props) => {
       return (num / 10000000).toFixed(1) + "Cr";
     }
     return num;
+  }
+
+  const handleStrokeColor = (x_label: string) => {
+    if (selectedBar === x_label) {
+      return "black"
+    }
+    return "transparent";
+  };
+
+  const handleBarClick = (props: any) => {
+    if (selectedBar === props.datum.x) {
+      setSelectedBar("")  
+    }
+    else {
+      setSelectedBar(props.datum.x)
+    }
   }
 
   return (
@@ -72,9 +91,14 @@ const VictoryBarChartComponent = ({ formattedData }: Props) => {
             }}
           />
           <VictoryBar
-            data={formattedData}
+            data={formattedData.bar_chart_data}
             style={{
-              data: { fill: "red", width: 10, stroke: "black", strokeWidth: 2 },
+              data: {
+                fill: "red",
+                width: 10,
+                stroke: ({ datum }) => handleStrokeColor(datum.x),
+                strokeWidth: 2,
+              },
               labels: { fontSize: 10 },
             }}
             labels={({ datum }) => `${humanReadableNum(datum.y)}`}
@@ -85,10 +109,7 @@ const VictoryBarChartComponent = ({ formattedData }: Props) => {
                   onPressIn: () => [
                     {
                       target: "data",
-                      mutation: (props) => {
-                        console.log("Bar clicked:", props.datum);
-                        return null;
-                      },
+                      mutation: (props) => {handleBarClick(props)},
                     },
                   ],
                 },

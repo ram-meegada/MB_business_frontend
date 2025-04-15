@@ -7,15 +7,17 @@ import {
   thirdColor,
 } from "@/constants/globalStyles";
 import BarChartComponent from "@/components/BarGraphComponent";
-import DonutChartComponent from "@/components/DonutGraphComponent";
 import { FETCH_EXPENDITURE_GRAPH_DATA } from "@/constants/endpoints";
 import APICall from "@/utils/CallApi";
 import LoadingModal from "@/components/LoadingModal";
 import VictoryBarChartComponent from "@/components/victoryBarGraphComponent";
+import VictoryPieChartComponent from "@/components/VictoryPieChartComponent";
 
-type dataProps = {
-  x: string;
-  y: number;
+export type dataProps = {
+  bar_chart_data: {x: string, y: number}[],
+  metadata: {
+    default_hover: string
+  }
 };
 
 const ExpenditureAnalytics = () => {
@@ -73,7 +75,7 @@ const ExpenditureAnalytics = () => {
             {openData === "monthly_data" ? (
               <VictoryBarChartComponent formattedData={data || []} />
             ) : null}
-            {openData === "monthly_data" ? <DonutChartComponent /> : null}
+            {openData === "monthly_data" ? <VictoryPieChartComponent /> : null}
           </View>
         </ScrollView>
       </View>
