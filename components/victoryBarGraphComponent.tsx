@@ -13,29 +13,21 @@ import {
   thirdColor,
 } from "@/constants/globalStyles";
 import { dataProps } from "@/app/pages/ExpenditureAnalytics";
+import { humanReadableNum } from "@/utils/common";
 
 const screenWidth = Dimensions.get("window").width;
 
 type Props = {
   formattedData: dataProps;
+  filters: ( year: string, month: string, category?: string ) => void;
 };
 
-const VictoryBarChartComponent = ({ formattedData }: Props) => {
+
+const VictoryBarChartComponent = ({ formattedData, filters }: Props) => {
   const [ selectedBar, setSelectedBar ] = useState("")
 
-  if (Object.keys(formattedData).length === 0) {
+  if (!formattedData || Object.keys(formattedData).length === 0) {
     return <Text>No data available</Text>;
-  }
-
-  function humanReadableNum(num: number) {
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + "K";
-    } else if (num >= 100000) {
-      return (num / 100000).toFixed(1) + "L";
-    } else if (num >= 10000000) {
-      return (num / 10000000).toFixed(1) + "Cr";
-    }
-    return num;
   }
 
   const handleStrokeColor = (x_label: string) => {
@@ -51,6 +43,7 @@ const VictoryBarChartComponent = ({ formattedData }: Props) => {
     }
     else {
       setSelectedBar(props.datum.x)
+      filters(formattedData.metadata.year, props.datum.x)
     }
   }
 
