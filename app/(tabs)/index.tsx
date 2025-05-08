@@ -14,6 +14,7 @@ import ManageExpenditurePage from "../pages/ManageExpense";
 import AnalyticsListScreen from "../pages/AnalyticsListScreen";
 import ExpenditureAnalytics from "../pages/ExpenditureAnalytics";
 import Login from "../pages/Login";
+import CustomersList from "../pages/CustomersList";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -77,6 +78,11 @@ const App = () => {
       <Stack.Screen
         name="ExpenditureAnalytics"
         component={ExpenditureAnalytics}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CustomersList"
+        component={CustomersList}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

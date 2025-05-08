@@ -39,15 +39,14 @@ type Props = {
 const AllLiveStocks: React.FC<Props> = ({ navigation }) => {
   const [data, setData] = useState<dataStructure[]>([]);
   const [loading, setLoading] = useState(false);
-  const BEARER_TOKEN = getFromSecureStorage(ACCESS_TOKEN_LS)
-
-  console.log(BEARER_TOKEN);
   
   useFocusEffect(
     useCallback(() => {
       const callAPI = async () => {
         try {
           setLoading(true);
+          const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS)
+
           const response = await fetch(`${LIST_STOCKS_ENDPOINT}`, {
             headers: {
               Accept: "application/json",

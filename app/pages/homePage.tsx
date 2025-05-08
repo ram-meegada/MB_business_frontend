@@ -37,7 +37,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       title: "Customers",
       backgroundImage: require("../../assets/images/customers.png"),
       audio: require("../../assets/audio/jim_entry_pathan.mp3"),
-      navigateTo: "AddStock",
+      navigateTo: "CustomersList",
     },
     {
       title: "Expenditure",

@@ -7,7 +7,11 @@ export const saveToSecureStorage = async (keyName: string, value: string) => {
   };
 
 export const getFromSecureStorage = async (keyName: string) => {
-    await SecureStore.getItemAsync(keyName)
+    let value = await SecureStore.getItemAsync(keyName)
+    if (value) {
+      return value
+    }
+    return null
 }
 
 

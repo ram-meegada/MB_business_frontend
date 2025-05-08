@@ -10,7 +10,7 @@ type Props = {
 
 const ThirdPage: React.FC<Props> = ({ navigation }) => {
   const translateY = useRef(new Animated.Value(200)).current;
-  const [BEARER_TOKEN, SET_BEARER_TOKEN] = useState()
+  const [BEARER_TOKEN, SET_BEARER_TOKEN] = useState<string | null>()
 
   async function getToken() {
     const token = await getFromSecureStorage(ACCESS_TOKEN_LS)
@@ -19,16 +19,23 @@ const ThirdPage: React.FC<Props> = ({ navigation }) => {
   getToken();
 
   useEffect(() => {
-    Animated.timing(translateY, {
-      toValue: 0,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start(() => {
-      if (BEARER_TOKEN.length) {
-        navigation.replace("Login");
-      }
-      navigation.replace("Login");
-    });
+    async function loadAnimation() {
+      const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS)
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 2000,
+        useNativeDriver: true,
+      }).start(() => {
+        if (BEARER_TOKEN && BEARER_TOKEN.length > 0) {
+          navigation.replace("Home");
+        }
+        else {
+          navigation.replace("Login");
+        }
+      });
+    }
+    loadAnimation();
+
   }, []);
 
   return (
