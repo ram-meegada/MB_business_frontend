@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, View, Animated } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { ThirdPageProps } from "../navigationTypes";
 import { globalStyle } from "@/constants/globalStyles";
+import { ACCESS_TOKEN_LS, getFromSecureStorage } from "@/utils/localStorage";
 
 type Props = {
   navigation: ThirdPageProps;
@@ -9,6 +10,13 @@ type Props = {
 
 const ThirdPage: React.FC<Props> = ({ navigation }) => {
   const translateY = useRef(new Animated.Value(200)).current;
+  const [BEARER_TOKEN, SET_BEARER_TOKEN] = useState()
+
+  async function getToken() {
+    const token = await getFromSecureStorage(ACCESS_TOKEN_LS)
+    SET_BEARER_TOKEN(token)
+  }
+  getToken();
 
   useEffect(() => {
     Animated.timing(translateY, {
@@ -16,7 +24,10 @@ const ThirdPage: React.FC<Props> = ({ navigation }) => {
       duration: 2000,
       useNativeDriver: true,
     }).start(() => {
-      navigation.replace("Home");
+      if (BEARER_TOKEN.length) {
+        navigation.replace("Login");
+      }
+      navigation.replace("Login");
     });
   }, []);
 

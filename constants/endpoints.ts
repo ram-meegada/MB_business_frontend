@@ -1,5 +1,10 @@
-export const BASE_URL = "http://192.168.1.5:8001/"
-// 192.168.121.125  192.168.1.7
+export const BASE_URL = "http://192.168.1.2:8001/"
+
+
+// Auth
+const AUTH = "user/auth/"
+export const LOGIN_ENDPOINT = BASE_URL + AUTH + "login/"
+
 // Endpoints for Livestock
 const LIVE_STOCK_COMMON_ENDPOINT = "live-stock/"
 export const ADD_STOCK_ENDPOINT = BASE_URL + LIVE_STOCK_COMMON_ENDPOINT + 'add/'

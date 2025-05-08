@@ -17,10 +17,10 @@ import {
   thirdColor,
 } from "@/constants/globalStyles";
 import { BASE_URL, LIST_STOCKS_ENDPOINT } from "@/constants/endpoints";
-import { BEARER_TOKEN } from "@/constants/common";
 import LoadingModal from "@/components/LoadingModal";
 import { AllLiveStocksProps } from "../navigationTypes";
 import { useFocusEffect } from "@react-navigation/native";
+import { ACCESS_TOKEN_LS, getFromSecureStorage } from "@/utils/localStorage";
 
 type dataStructure = {
   id: number;
@@ -39,7 +39,10 @@ type Props = {
 const AllLiveStocks: React.FC<Props> = ({ navigation }) => {
   const [data, setData] = useState<dataStructure[]>([]);
   const [loading, setLoading] = useState(false);
+  const BEARER_TOKEN = getFromSecureStorage(ACCESS_TOKEN_LS)
 
+  console.log(BEARER_TOKEN);
+  
   useFocusEffect(
     useCallback(() => {
       const callAPI = async () => {
