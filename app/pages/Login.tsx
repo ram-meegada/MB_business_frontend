@@ -21,6 +21,14 @@ const Login = ({ navigation }: Props) => {
 
   async function handleLogin() {
     const payload = {username: username, password: password}
+    if (!username) {
+      Alert.alert('Required', 'Username is required')
+      return 
+    }
+    if (!password) {
+      Alert.alert('Required', 'Password is required')
+      return 
+    }
     setLoading(true)
     try {
         const response = await fetch(LOGIN_ENDPOINT, {
