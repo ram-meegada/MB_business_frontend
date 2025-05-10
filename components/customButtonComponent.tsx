@@ -5,9 +5,10 @@ import { globalStyle, textColor, thirdColor } from "@/constants/globalStyles";
 type Props = {
   onSubmit: () => void;
   buttonName: string;
+  addedStyles?: any
 };
 
-const CustomButtonComponent: React.FC<Props> = ({ onSubmit, buttonName }) => {
+const CustomButtonComponent: React.FC<Props> = ({ onSubmit, buttonName, addedStyles={} }) => {
   return (
     <Pressable
       onPress={onSubmit}
@@ -18,7 +19,7 @@ const CustomButtonComponent: React.FC<Props> = ({ onSubmit, buttonName }) => {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 8,
-      }, globalStyle.shadowEffect]}
+      }, globalStyle.shadowEffect, addedStyles]}
     >
       <Text
         style={{

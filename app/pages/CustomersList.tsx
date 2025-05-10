@@ -1,84 +1,150 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { globalStyle } from "@/constants/globalStyles";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import { globalStyle, secondaryColor } from "@/constants/globalStyles";
+import CustomButtonComponent from "@/components/customButtonComponent";
+import { CustomersListProps } from "../navigationTypes";
+import { useFocusEffect } from "@react-navigation/native";
+import APICall from "@/utils/CallApi";
+import { CUSTOMERS_LIST } from "@/constants/endpoints";
 
+type Props = {
+    navigation: CustomersListProps
+}
 
-const CustomersList = () => {
-    const l = [
-        {
-            "id": 1,
-            "user": {
-                "id": 5,
-                "username": "ram",
-                "name": "ram",
-                "email": null,
-                "role": 2
-            },
-            "subscription": {
-                "id": 2,
-                "animal": "Cow",
-                "product": "Milk",
-                "price": 60.0,
-                "quantity": 500
-            },
-            "price_at_subscription": 45.0,
-            "start_date": "2025-05-03",
-            "end_date": "2025-05-31",
-            "delivery_schedule": {
-                "evening": 500,
-                "morning": 500
-            },
-            "delivery_agent": {
-                "id": 4,
-                "username": "kane",
-                "name": "kane",
-                "email": null,
-                "role": 3
-            }
-        },
-        {
-            "id": 2,
-            "user": {
-                "id": 6,
-                "username": "customer1",
-                "name": "customer1",
-                "email": "customer1@yopmail.com",
-                "role": 2
-            },
-            "subscription": {
-                "id": 1,
-                "animal": "Buffalo",
-                "product": "Milk",
-                "price": 47.0,
-                "quantity": 500
-            },
-            "price_at_subscription": 47.0,
-            "start_date": "2025-05-07",
-            "end_date": "2025-05-31",
-            "delivery_schedule": {
-                "evening": 250,
-                "morning": 500
-            },
-            "delivery_agent": {
-                "id": 4,
-                "username": "kane",
-                "name": "kane",
-                "email": null,
-                "role": 3
-            }
-        }
-    ]
+type dataProps = {
+    id: number,
+    user: { username: string },
+    subscription: { animal: string, product: string, price: number, quantity: number },
+    price_at_subscription: number,
+    start_date: string,
+    end_date: string,
+    delivery_schedule: {morning: number | null, evening: number | null},
+    delivery_agent: {username: string}
+}
+
+const CustomersList = ({ navigation }: Props) => {
+  const [loading, setLoading] = useState(false)
+  const [thisRecordCollapsed, setThisRecordCollapsed] = useState(0);
+  const [data, setData] = useState<dataProps[]>()
+
+  function getDeliveryMorningOrEvening(schedule: {
+    evening: number | null;
+    morning: number | null;
+  }) {
+    if (schedule.evening && schedule.morning) {
+      return "Both";
+    } else if (schedule.morning) {
+      return "Morning only";
+    }
+    return "Evening only";
+  }
+
+  function openMoreDetails(id: number) {
+    if (thisRecordCollapsed == id) {
+        setThisRecordCollapsed(0);
+    }
+    else {
+        setThisRecordCollapsed(id);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      const FetchRecentExpenses = async () => {
+        setLoading(true);
+
+        const response = await APICall({
+          method: "GET",
+          Accept: "application/json",
+          endPoint: CUSTOMERS_LIST,
+          showToast: false,
+          navigation: navigation
+        });
+        setData(response)
+        setLoading(false);
+      };
+      FetchRecentExpenses();
+    }, [])
+  );
+
   return (
     <View style={globalStyle.container}>
       <View style={globalStyle.subContainer}>
         <Text style={globalStyle.pageHeadingStyle}>Customers</Text>
-        <View>
-            {l.map((item, index) => (
-                <View key={index}>
-                    <Text>{item.user.username}</Text>
-                </View>
-            ))}
-        </View>
+        <CustomButtonComponent 
+        onSubmit={() => navigation.navigate("AddCustomer")}
+        buttonName="Add Customer"
+        addedStyles={{width: 130, marginBottom: 20, alignSelf: 'flex-end', height: 40}}
+        />
+        <FlatList
+          data={data}
+          renderItem={({ item, index }) => (
+            <Pressable
+              key={index}
+              style={[
+                {
+                  marginBottom: 10,
+                  backgroundColor: secondaryColor,
+                  padding: 10,
+                  borderRadius: 10,
+                },
+                globalStyle.shadowEffect,
+              ]}
+            >
+              <Text>
+                name:{" "}
+                <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                  {item.user.username}
+                </Text>
+              </Text>
+              <Text>
+                Price at subscription:{" "}
+                <Text style={styles.textStyle}>
+                  {item.price_at_subscription}/-
+                </Text>
+              </Text>
+              <Text>
+                Subscription:{" "}
+                <Text style={styles.textStyle}>
+                  {item.subscription.animal} {item.subscription.product}{" "}
+                  {item.subscription.quantity}ml {item.subscription.price}/-
+                </Text>
+              </Text>
+              <Pressable onPress={() => openMoreDetails(item.id)}>
+                {thisRecordCollapsed !== item.id ?(<Text
+                  style={{
+                    alignSelf: "center",
+                    fontWeight: "500",
+                    fontSize: 12,
+                    color: "grey",
+                  }}
+                >
+                  more
+                </Text>) : null}
+                {thisRecordCollapsed === item.id ? (
+                  <View>
+                    <Text>
+                      Delivery schedule:{" "}
+                      <Text>
+                        {getDeliveryMorningOrEvening(item.delivery_schedule)}
+                      </Text>
+                    </Text>
+                    <Text>
+                      Delivery Agent:{" "}
+                      <Text>{item.delivery_agent.username}</Text>
+                    </Text>
+                    <Text>
+                      Start Date: <Text>{item.start_date}</Text>
+                    </Text>
+                    <Text>
+                      End Date: <Text>{item.end_date}</Text>
+                    </Text>
+                  </View>
+                ) : null}
+              </Pressable>
+            </Pressable>
+          )}
+        ></FlatList>
       </View>
     </View>
   );
@@ -86,4 +152,6 @@ const CustomersList = () => {
 
 export default CustomersList;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textStyle: { fontWeight: "bold" },
+});

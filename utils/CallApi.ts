@@ -1,5 +1,5 @@
-import { BEARER_TOKEN } from "@/constants/common";
 import { Alert } from "react-native";
+import { ACCESS_TOKEN_LS, getFromSecureStorage } from "./localStorage";
 
 type Props = {
   method: string;
@@ -8,6 +8,7 @@ type Props = {
   contentType?: string;
   formData?: any;
   showToast?: boolean;
+  navigation?: any
 };
 
 const APICall = async ({
@@ -17,9 +18,11 @@ const APICall = async ({
   contentType,
   formData,
   showToast,
+  navigation
 }: Props) => {
   try {
-    
+    const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS)
+
     let json_response = null;
     const options: any = {
       method: method,
@@ -42,6 +45,7 @@ const APICall = async ({
 
     if (response.status === 401) {
       Alert.alert("Session Ended", "Please login again.");
+      navigation.navigate("Login")
     } else if (response.status === 400) {
       Alert.alert("Error", json_response?.message);
     } else if ([200, 201].includes(response.status)) {

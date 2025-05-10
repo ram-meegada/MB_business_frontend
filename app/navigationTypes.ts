@@ -13,7 +13,9 @@ export type RootStackNavigationList = {
     ManageExpenditurePage: {id: number},
     AnalyticsListScreen: undefined,
     ExpenditureAnalytics: undefined,
-    Login: undefined
+    Login: undefined,
+    AddCustomer: undefined,
+    CustomersList: undefined
 }
 
 export type homePageProps = NativeStackNavigationProp<RootStackNavigationList, "Home">;
@@ -27,3 +29,5 @@ export type ExpenditurePageProps = NativeStackNavigationProp<RootStackNavigation
 export type ManageExpenditurePageProps = NativeStackNavigationProp<RootStackNavigationList, "ManageExpenditurePage">;
 export type AnalyticsListScreenProps = NativeStackNavigationProp<RootStackNavigationList, "AnalyticsListScreen">;
 export type LoginProps = NativeStackNavigationProp<RootStackNavigationList, "Login">;
+export type AddCustomerProps = NativeStackNavigationProp<RootStackNavigationList, "AddCustomer">;
+export type CustomersListProps = NativeStackNavigationProp<RootStackNavigationList, "CustomersList">;

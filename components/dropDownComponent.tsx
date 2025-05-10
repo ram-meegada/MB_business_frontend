@@ -7,7 +7,7 @@ type Props = {
   data: { label: string; value: string }[];
   placeHolder: string;
   search: boolean;
-  searchPlaceholder: string;
+  searchPlaceholder?: string;
   optionSelected: (id: number, text: string) => void;
   value?: string
 };
@@ -77,3 +77,18 @@ const styles = StyleSheet.create({
 });
 
 export default DropDownTsxComponent;
+
+
+// [
+//   {
+//       "id": 127,
+//       "label": "Feed",
+//       "value": "Feed",
+//       "isHeader": true
+//   },
+//   {
+//       "id": 128,
+//       "label": "Green Fodder",
+//       "value": "Green Fodder"
+//   }
+// ]
