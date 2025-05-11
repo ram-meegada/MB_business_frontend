@@ -14,8 +14,8 @@ import {
 
 type Props = {
   placeHolder: string;
-  multiline: boolean;
-  keyboardType: KeyboardTypeOptions;
+  multiline?: boolean;
+  keyboardType?: KeyboardTypeOptions;
   onTextChange: (text: number | string) => void;
   value?: string | number;
   fieldType?: string
@@ -23,11 +23,11 @@ type Props = {
 
 const TextInputComponent: React.FC<Props> = ({
   placeHolder,
-  multiline,
-  keyboardType,
+  multiline=false,
+  keyboardType="default",
   onTextChange,
   value,
-  fieldType
+  fieldType="string"
 }) => {
   const [textHighlight, setTextHighlight] = useState(false);
 

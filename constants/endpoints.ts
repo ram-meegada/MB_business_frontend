@@ -15,15 +15,16 @@ export const STOCK_BY_ID_ENDPOINT = BASE_URL + LIVE_STOCK_COMMON_ENDPOINT
 // Endpoints for Expenditure
 const EXPENDITURE_COMMON_ENDPOINT = "expenditure/"
 
-// Endpoints for Expenditure categories
 export const ADD_EXPENDITURE = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + ''
 export const FETCH_EXPENDITURE_CATEGORIES = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + 'category/'
-
-// 
+ 
 export const FETCH_EXPENDITURE_BY_ID = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + 'manage/'
 export const FETCH_EXPENDITURE_GRAPH_DATA = BASE_URL + EXPENDITURE_COMMON_ENDPOINT + 'analytics/'
 
 
 // Endpoints for Customer
 const CUSTOMERS_ENDPOINTS = "customers/"
+
 export const CUSTOMERS_LIST = BASE_URL + CUSTOMERS_ENDPOINTS + 'all/'
+export const ACTIVE_SUBSCRIPTION_LIST = BASE_URL + CUSTOMERS_ENDPOINTS + 'subscriptions/all/'
+export const ACTIVE_DELIVERY_AGENTS_LIST = BASE_URL + CUSTOMERS_ENDPOINTS + 'delivery-agents/all/'

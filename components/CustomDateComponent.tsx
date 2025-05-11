@@ -10,6 +10,7 @@ type Props = {
 
 const CustomDateComponent = ({ fieldName, dateSelection }: Props) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [ selectedDate, setSelectedDate ] = useState<Date | string>(fieldName)
 
     const showDatePicker = (title: string) => {
         setDatePickerVisibility(true);
@@ -22,7 +23,17 @@ const CustomDateComponent = ({ fieldName, dateSelection }: Props) => {
     const handleDateSelect = (text: Date) => {
         dateSelection(text)
         hideDatePicker()
+        setSelectedDate(text.toISOString().slice(0, 10))
     }
+
+    function dateColor() {
+        const temp = parseInt(selectedDate.toString())
+        if (temp && typeof temp === "number") {
+            return "black"
+        }
+        return "grey"
+    }
+
   return (
     <View>
       <Pressable
@@ -47,11 +58,11 @@ const CustomDateComponent = ({ fieldName, dateSelection }: Props) => {
         <Text
           style={{
             fontWeight: "400",
-            color: "grey",
+            color: dateColor(),
             fontSize: 14,
           }}
         >
-          {fieldName}
+          {selectedDate.toString()}
         </Text>
       </Pressable>
       <DateTimePickerModal

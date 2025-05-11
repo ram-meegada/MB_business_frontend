@@ -6,6 +6,7 @@ import { CustomersListProps } from "../navigationTypes";
 import { useFocusEffect } from "@react-navigation/native";
 import APICall from "@/utils/CallApi";
 import { CUSTOMERS_LIST } from "@/constants/endpoints";
+import LoadingModal from "@/components/LoadingModal";
 
 type Props = {
     navigation: CustomersListProps
@@ -50,7 +51,7 @@ const CustomersList = ({ navigation }: Props) => {
 
   useFocusEffect(
     useCallback(() => {
-      const FetchRecentExpenses = async () => {
+      const FetchAllActiveCustomers = async () => {
         setLoading(true);
 
         const response = await APICall({
@@ -63,12 +64,13 @@ const CustomersList = ({ navigation }: Props) => {
         setData(response)
         setLoading(false);
       };
-      FetchRecentExpenses();
+      FetchAllActiveCustomers();
     }, [])
   );
 
   return (
     <View style={globalStyle.container}>
+        <LoadingModal visible={loading} />
       <View style={globalStyle.subContainer}>
         <Text style={globalStyle.pageHeadingStyle}>Customers</Text>
         <CustomButtonComponent 
