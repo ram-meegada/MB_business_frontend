@@ -100,7 +100,7 @@ const AddCustomer = ({ navigation }: Props) => {
     async function handleAddCustomer() {
         setLoading(true);
         const response = await APICall({
-            method: "GET",
+            method: "POST",
             Accept: "application/json",
             endPoint: ACTIVE_SUBSCRIPTION_LIST,
             showToast: false,
@@ -130,10 +130,6 @@ const AddCustomer = ({ navigation }: Props) => {
             <CustomDateComponent
             fieldName="Select Starting Date"
             dateSelection={(text) => setPayload({...payload, starting_date: text})}
-            />
-            <CustomDateComponent
-            fieldName="Select Ending Date"
-            dateSelection={(text) => setPayload({...payload, ending_date: text})}
             />
             <DropDownTsxComponent
                 data={deliverySchedule}

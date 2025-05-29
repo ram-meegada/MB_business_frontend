@@ -16,7 +16,6 @@ type dataProps = {
     id: number,
     user: { username: string },
     subscription: { animal: string, product: string, price: number, quantity: number },
-    price_at_subscription: number,
     start_date: string,
     end_date: string,
     delivery_schedule: {morning: number | null, evening: number | null},
@@ -97,12 +96,6 @@ const CustomersList = ({ navigation }: Props) => {
                 name:{" "}
                 <Text style={{ fontWeight: "bold", fontSize: 16 }}>
                   {item.user.username}
-                </Text>
-              </Text>
-              <Text>
-                Price at subscription:{" "}
-                <Text style={styles.textStyle}>
-                  {item.price_at_subscription}/-
                 </Text>
               </Text>
               <Text>
