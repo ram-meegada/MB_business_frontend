@@ -14,8 +14,7 @@ import LoadingModal from '@/components/LoadingModal'
 type payloadProps = {
     username: string,
     subscription: number,
-    starting_date: Date,
-    ending_date: Date,
+    start_date: Date,
     delivery_schedule: string,
     delivery_agent: number
 }
@@ -99,13 +98,15 @@ const AddCustomer = ({ navigation }: Props) => {
 
     async function handleAddCustomer() {
         setLoading(true);
-        const response = await APICall({
-            method: "POST",
-            Accept: "application/json",
-            endPoint: ACTIVE_SUBSCRIPTION_LIST,
-            showToast: false,
-            navigation: navigation
-        });
+        console.log(payload, '=================payload=============');
+        
+        // const response = await APICall({
+        //     method: "POST",
+        //     Accept: "application/json",
+        //     endPoint: ACTIVE_SUBSCRIPTION_LIST,
+        //     showToast: false,
+        //     navigation: navigation
+        // });
         setLoading(false);
     }
 
@@ -129,7 +130,7 @@ const AddCustomer = ({ navigation }: Props) => {
             />
             <CustomDateComponent
             fieldName="Select Starting Date"
-            dateSelection={(text) => setPayload({...payload, starting_date: text})}
+            dateSelection={(text) => setPayload({...payload, start_date: text})}
             />
             <DropDownTsxComponent
                 data={deliverySchedule}
