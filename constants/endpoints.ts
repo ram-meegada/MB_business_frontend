@@ -1,4 +1,4 @@
-export const BASE_URL = "http://192.168.1.7:8001/"
+export const BASE_URL = "http://192.168.1.2:8001/"
 
 
 // Auth
@@ -28,3 +28,4 @@ const CUSTOMERS_ENDPOINTS = "customers/"
 export const CUSTOMERS_LIST = BASE_URL + CUSTOMERS_ENDPOINTS + 'all/'
 export const ACTIVE_SUBSCRIPTION_LIST = BASE_URL + CUSTOMERS_ENDPOINTS + 'subscriptions/all/'
 export const ACTIVE_DELIVERY_AGENTS_LIST = BASE_URL + CUSTOMERS_ENDPOINTS + 'delivery-agents/all/'
+export const ADD_CUSTOMER = BASE_URL + CUSTOMERS_ENDPOINTS + 'add/'

@@ -14,7 +14,7 @@ type Props = {
 
 type dataProps = {
     id: number,
-    user: { username: string },
+    user: { name: string },
     subscription: { animal: string, product: string, price: number, quantity: number },
     start_date: string,
     delivery_schedule: {morning: number | null, evening: number | null},
@@ -94,7 +94,7 @@ const CustomersList = ({ navigation }: Props) => {
               <Text>
                 name:{" "}
                 <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                  {item.user.username}
+                  {item.user?.name}
                 </Text>
               </Text>
               <Text>
@@ -102,6 +102,12 @@ const CustomersList = ({ navigation }: Props) => {
                 <Text style={styles.textStyle}>
                   {item.subscription.animal} {item.subscription.product}{" "}
                   {item.subscription.quantity}ml {item.subscription.price}/-
+                </Text>
+              </Text>
+              <Text>
+                Delivery schedule:{" "}
+                <Text>
+                  {getDeliveryMorningOrEvening(item.delivery_schedule)}
                 </Text>
               </Text>
               <Pressable onPress={() => openMoreDetails(item.id)}>
@@ -117,12 +123,6 @@ const CustomersList = ({ navigation }: Props) => {
                 </Text>) : null}
                 {thisRecordCollapsed === item.id ? (
                   <View>
-                    <Text>
-                      Delivery schedule:{" "}
-                      <Text>
-                        {getDeliveryMorningOrEvening(item.delivery_schedule)}
-                      </Text>
-                    </Text>
                     <Text>
                       Delivery Agent:{" "}
                       <Text>{item.delivery_agent?.username}</Text>

@@ -5,7 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 type Props = {
     fieldName: string,
-    dateSelection: (text: Date) => void
+    dateSelection: (text: Date | string) => void
 }
 
 const CustomDateComponent = ({ fieldName, dateSelection }: Props) => {
@@ -21,9 +21,10 @@ const CustomDateComponent = ({ fieldName, dateSelection }: Props) => {
     };
 
     const handleDateSelect = (text: Date) => {
-        dateSelection(text)
+        const dateOnly = text.toISOString().split('T')[0]
+        dateSelection(dateOnly)
         hideDatePicker()
-        setSelectedDate(text.toISOString().slice(0, 10))
+        setSelectedDate(dateOnly)
     }
 
     function dateColor() {

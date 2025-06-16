@@ -8,7 +8,7 @@ type Props = {
   contentType?: string;
   formData?: any;
   showToast?: boolean;
-  navigation?: any
+  navigation?: any;
 };
 
 const APICall = async ({
@@ -18,10 +18,10 @@ const APICall = async ({
   contentType,
   formData,
   showToast,
-  navigation
+  navigation,
 }: Props) => {
   try {
-    const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS)
+    const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS);
 
     let json_response = null;
     const options: any = {
@@ -45,7 +45,7 @@ const APICall = async ({
 
     if (response.status === 401) {
       Alert.alert("Session Ended", "Please login again.");
-      navigation.navigate("Login")
+      navigation.navigate("Login");
     } else if (response.status === 400) {
       Alert.alert("Error", json_response?.message);
     } else if ([200, 201].includes(response.status)) {
@@ -57,10 +57,10 @@ const APICall = async ({
     } else {
       Alert.alert("Warning!", "response not handled");
     }
-    return json_response.data
+    return json_response.data;
   } catch (err) {
     Alert.alert("Error", String(err));
-    return null
+    return null;
   }
 };
 

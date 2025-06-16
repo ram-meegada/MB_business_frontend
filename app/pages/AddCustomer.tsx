@@ -5,7 +5,7 @@ import DropDownTsxComponent from '@/components/dropDownComponent'
 import TextInputComponent from '@/components/TextInputComponent'
 import CustomDateComponent from '@/components/CustomDateComponent'
 import APICall from '@/utils/CallApi'
-import { ACTIVE_DELIVERY_AGENTS_LIST, ACTIVE_SUBSCRIPTION_LIST } from '@/constants/endpoints'
+import { ACTIVE_DELIVERY_AGENTS_LIST, ACTIVE_SUBSCRIPTION_LIST, ADD_CUSTOMER } from '@/constants/endpoints'
 import { AddCustomerProps } from '../navigationTypes'
 import CustomButtonComponent from '@/components/customButtonComponent'
 import LoadingModal from '@/components/LoadingModal'
@@ -13,8 +13,9 @@ import LoadingModal from '@/components/LoadingModal'
 
 type payloadProps = {
     username: string,
+    name: string,
     subscription: number,
-    start_date: Date,
+    start_date: Date | string,
     delivery_schedule: string,
     delivery_agent: number
 }
@@ -98,15 +99,16 @@ const AddCustomer = ({ navigation }: Props) => {
 
     async function handleAddCustomer() {
         setLoading(true);
-        console.log(payload, '=================payload=============');
         
-        // const response = await APICall({
-        //     method: "POST",
-        //     Accept: "application/json",
-        //     endPoint: ACTIVE_SUBSCRIPTION_LIST,
-        //     showToast: false,
-        //     navigation: navigation
-        // });
+        const response = await APICall({
+            method: "POST",
+            Accept: "application/json",
+            contentType: "application/json",
+            endPoint: ADD_CUSTOMER,
+            formData: payload,
+            showToast: true,
+            navigation: navigation
+        });
         setLoading(false);
     }
 
@@ -119,6 +121,11 @@ const AddCustomer = ({ navigation }: Props) => {
             placeHolder="Set Username"
             onTextChange={(text) => setPayload({...payload, username: text.toString()})}
             value={payload?.username}
+            />
+            <TextInputComponent 
+            placeHolder="Enter Name"
+            onTextChange={(text) => setPayload({...payload, name: text.toString()})}
+            value={payload?.name}
             />
             <DropDownTsxComponent
                 data={allActiveSubscriptions}
