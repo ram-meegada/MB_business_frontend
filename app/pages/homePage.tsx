@@ -24,39 +24,38 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     {
       title: "Add stock",
       backgroundImage: require("../../assets/images/add_buffalo.png"),
-      audio: require("../../assets/audio/scam_1992_bgm.mp3"),
       navigateTo: "AddStock",
     },
     {
       title: "Daily data",
       backgroundImage: require("../../assets/images/data_entry.jpg"),
-      audio: require("../../assets/audio/animal_bgm.mp3"),
       navigateTo: "AddStock",
     },
     {
       title: "Customers",
       backgroundImage: require("../../assets/images/customers.png"),
-      audio: require("../../assets/audio/jim_entry_pathan.mp3"),
       navigateTo: "CustomersList",
     },
     {
       title: "Expenditure",
       backgroundImage: require("../../assets/images/expenditure.png"),
-      audio: require("../../assets/audio/captain_jacksparrow.mp3"),
       navigateTo: "ExpenditurePage",
     },
     {
       title: "Manage Stock",
       backgroundImage: require("../../assets/images/manage_stock.png"),
-      audio: require("../../assets/audio/captain_jacksparrow.mp3"),
       navigateTo: "AllLiveStocks",
     },
     {
       title: "Analytics",
       backgroundImage: require("../../assets/images/analytics.png"),
-      audio: require("../../assets/audio/captain_jacksparrow.mp3"),
       navigateTo: "AnalyticsListScreen",
     },
+    {
+      title: "Payments",
+      backgroundImage: require("../../assets/images/payments.png"),
+      navigateTo: "Payments",
+    }
   ];
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [audioPlaying, setaudioPlaying] = useState(-1);
@@ -167,7 +166,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 imageStyle={{ opacity: 0.5 }}
               >
                 {/* <Text style={styles.buttonTe-xt}>{key.title}</Text> */}
-                <Pressable onPress={() => playSound(index, key.audio)}>
+                {/* <Pressable onPress={() => playSound(index, key.audio)}>
                   <Image
                     style={{
                       height: 20,
@@ -182,7 +181,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                         : require("../../assets/images/on_audio.png")
                     }
                   />
-                </Pressable>
+                </Pressable> */}
               </ImageBackground>
             </Pressable>
             <Pressable onPress={() => navigateToAddStock(key.navigateTo)}>

@@ -16,6 +16,7 @@ import ExpenditureAnalytics from "../pages/ExpenditureAnalytics";
 import Login from "../pages/Login";
 import CustomersList from "../pages/CustomersList";
 import AddCustomer from "../pages/AddCustomer";
+import Payments from "../pages/Payments";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -89,6 +90,11 @@ const App = () => {
       <Stack.Screen
         name="AddCustomer"
         component={AddCustomer}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Payments"
+        component={Payments}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

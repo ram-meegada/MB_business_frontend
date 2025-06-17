@@ -15,7 +15,7 @@ type Props = {
 type dataProps = {
     id: number,
     user: { name: string },
-    subscription: { animal: string, product: string, price: number, quantity: number },
+    subscription: string,
     start_date: string,
     delivery_schedule: {morning: number | null, evening: number | null},
     delivery_agent: {username: string}
@@ -92,7 +92,7 @@ const CustomersList = ({ navigation }: Props) => {
               ]}
             >
               <Text>
-                name:{" "}
+                Name:{" "}
                 <Text style={{ fontWeight: "bold", fontSize: 16 }}>
                   {item.user?.name}
                 </Text>
@@ -100,14 +100,7 @@ const CustomersList = ({ navigation }: Props) => {
               <Text>
                 Subscription:{" "}
                 <Text style={styles.textStyle}>
-                  {item.subscription.animal} {item.subscription.product}{" "}
-                  {item.subscription.quantity}ml {item.subscription.price}/-
-                </Text>
-              </Text>
-              <Text>
-                Delivery schedule:{" "}
-                <Text>
-                  {getDeliveryMorningOrEvening(item.delivery_schedule)}
+                  {item.subscription}
                 </Text>
               </Text>
               <Pressable onPress={() => openMoreDetails(item.id)}>

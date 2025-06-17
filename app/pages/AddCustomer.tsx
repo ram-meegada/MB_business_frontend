@@ -16,7 +16,6 @@ type payloadProps = {
     name: string,
     subscription: number,
     start_date: Date | string,
-    delivery_schedule: string,
     delivery_agent: number
 }
 
@@ -87,11 +86,6 @@ const AddCustomer = ({ navigation }: Props) => {
         setPayload({...payload, subscription: id})
     }
 
-    function handleDeliveryScheduleSelection(id: number, text: string) {
-        setSelectedDeliverySchedule(text)
-        setPayload({...payload, delivery_schedule: text})
-    }
-
     function handleDeliveryAgentSelection(id: number, text: string) {
         setSelectedDeliveryAgent(text)
         setPayload({...payload, delivery_agent: id})
@@ -130,7 +124,7 @@ const AddCustomer = ({ navigation }: Props) => {
             <DropDownTsxComponent
                 data={allActiveSubscriptions}
                 placeHolder="Select Subscription"
-                search={true}
+                search={false}
                 searchPlaceholder="Search for subscription"
                 optionSelected={(id, text) => handleSubscriptionSelection(id, text)}
                 value={selectedSubscription}
@@ -138,13 +132,6 @@ const AddCustomer = ({ navigation }: Props) => {
             <CustomDateComponent
             fieldName="Select Starting Date"
             dateSelection={(text) => setPayload({...payload, start_date: text})}
-            />
-            <DropDownTsxComponent
-                data={deliverySchedule}
-                placeHolder="Select Delivery Schedule"
-                search={false}
-                optionSelected={(id, text) => handleDeliveryScheduleSelection(id, text)}
-                value={selectedDeliverySchedule}
             />
             <DropDownTsxComponent
                 data={allActiveDeliveryAgents}
