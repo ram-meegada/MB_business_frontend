@@ -78,6 +78,8 @@ const CustomersList = ({ navigation }: Props) => {
         />
         <FlatList
           data={data}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item, index }) => (
             <Pressable
               key={index}

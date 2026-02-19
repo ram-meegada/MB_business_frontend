@@ -14,12 +14,17 @@ import { Audio } from "expo-av";
 import { homePageProps } from "../navigationTypes";
 import { globalStyle, secondaryColor } from "@/constants/globalStyles";
 import PieChartComponent from "@/components/PieChartComponent";
+import APICall from "@/utils/CallApi";
+import { DETAILS_ENDPOINT } from "@/constants/endpoints";
+import LoadingModal from "@/components/LoadingModal";
 
 type Props = {
   navigation: homePageProps;
 };
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
+
   const homePageButtons = [
     {
       title: "Add stock",
@@ -60,7 +65,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [audioPlaying, setaudioPlaying] = useState(-1);
 
-  const navigateToAddStock = (navigateTo: string) => {
+  const navigateToAddStock = (navigateTo: any) => {
     navigation.navigate(navigateTo);
   };
 
@@ -98,8 +103,28 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       : undefined;
   }, [sound]);
 
+  const handleImagePress = () => {
+    navigation.navigate('UserDetails')
+  }
+
+  // useEffect(() => {
+  //   const FetchUserDetails = async () => {
+  //     setLoading(true);
+  //     const response = await APICall({
+  //       method: "GET",
+  //       Accept: "application/json",
+  //       endPoint: DETAILS_ENDPOINT,
+  //       showToast: false,
+  //     });
+      
+  //     setLoading(false);
+  //   };
+  //   FetchUserDetails();
+  // }, []);
+
   return (
     <View style={globalStyle.container}>
+      <LoadingModal visible={loading} />
       <ImageBackground
         source={require("../../assets/images/backbuff.png")}
         style={{
@@ -131,13 +156,15 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <View style={{ flex: 1 }}>
             <Text style={{ fontWeight: "bold", fontSize: 18 }}>Home</Text>
             <Text numberOfLines={1} style={{ fontWeight: "500" }}>
-              403 room no, samskruthi pg for gents, 88, koramangala
+              2-98, polukonda, krishna dt, Andhra Pradesh
             </Text>
           </View>
-          <Image
-            style={{ height: 40, width: 40, borderRadius: 20 }}
-            source={require("../../assets/images/ram_profile.png")}
-          />
+          <Pressable onPress={handleImagePress}>
+            <Image
+              style={{ height: 40, width: 40, borderRadius: 20 }}
+              source={require("../../assets/images/ram_profile.png")}
+            />
+          </Pressable>
         </View>
       </ImageBackground>
       <View

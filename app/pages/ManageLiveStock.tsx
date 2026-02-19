@@ -38,14 +38,17 @@ import {
   ManageLiveStockProps,
   RootStackNavigationList,
 } from "../navigationTypes";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { ACCESS_TOKEN_LS, getFromSecureStorage } from "@/utils/localStorage";
 
 type Props = {
   navigation: ManageLiveStockProps;
-  route: RouteProp<RootStackNavigationList, "ManageLiveStock">;
 };
 
-const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
+type ManageLiveStockRoute = RouteProp<RootStackNavigationList, "ManageLiveStock">
+
+const ManageLiveStock: React.FC<Props> = ({ navigation }) => {
+  const route = useRoute<ManageLiveStockRoute>();
   const id = route.params.id;
   const [textHighlight, setTextHighlight] = useState(-1);
   const [breedValue, setBreedValue] = useState(null);
@@ -65,7 +68,6 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const BEARER_TOKEN = Common.BEARER_TOKEN;
 
   function validatePayload() {
     let hasErrors = false;
@@ -95,6 +97,7 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
 
   useEffect(() => {
     const FetchStockById = async () => {
+      const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS);
       try {
         setLoading(true);
         const response = await fetch(`${STOCK_BY_ID_ENDPOINT}${id}/`, {
@@ -107,7 +110,6 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
         if (response.ok) {
           const json_response = await response.json();
           const data = json_response?.data;
-          console.log(data, "----data----");
 
           setImage(`${BASE_URL}${data.image_url}`);
           setBreedValue(data.breed);
@@ -136,6 +138,7 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
   }, []);
 
   const CallApi = async () => {
+    const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS);
     const formData = new FormData();
 
     formData.append("image", {
@@ -202,6 +205,7 @@ const ManageLiveStock: React.FC<Props> = ({ navigation, route }) => {
   };
 
   const CallDeleteApi = async () => {
+    const BEARER_TOKEN = await getFromSecureStorage(ACCESS_TOKEN_LS);
     try {
       setLoading(true);
       const response = await fetch(`${STOCK_BY_ID_ENDPOINT}${id}/`, {

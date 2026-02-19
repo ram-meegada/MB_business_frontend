@@ -82,6 +82,7 @@ const ExpenditurePage = ({ navigation }: Props) => {
           Accept: "application/json",
           endPoint: FETCH_EXPENDITURE_CATEGORIES,
           showToast: false,
+          navigation: navigation
         });
         if (response) {
           setExpenseOptions(response);

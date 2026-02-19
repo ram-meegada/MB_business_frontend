@@ -17,8 +17,12 @@ import Login from "../pages/Login";
 import CustomersList from "../pages/CustomersList";
 import AddCustomer from "../pages/AddCustomer";
 import Payments from "../pages/Payments";
+import UserDetails from "../pages/UserDetails";
+import { RootStackNavigationList } from "../navigationTypes";
 
-const Stack = createNativeStackNavigator();
+
+const Stack = createNativeStackNavigator<RootStackNavigationList>();
+
 const App = () => {
   return (
     <Stack.Navigator initialRouteName="ThirdPage">
@@ -95,6 +99,11 @@ const App = () => {
       <Stack.Screen
         name="Payments"
         component={Payments}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UserDetails"
+        component={UserDetails}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

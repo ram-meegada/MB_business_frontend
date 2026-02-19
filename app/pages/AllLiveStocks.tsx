@@ -36,7 +36,7 @@ type Props = {
   navigation: AllLiveStocksProps;
 };
 
-const AllLiveStocks: React.FC<Props> = ({ navigation }) => {
+const AllLiveStocks = ({ navigation }: Props) => {
   const [data, setData] = useState<dataStructure[]>([]);
   const [loading, setLoading] = useState(false);
   
@@ -58,7 +58,8 @@ const AllLiveStocks: React.FC<Props> = ({ navigation }) => {
             const json_response = await response.json();
             setData(json_response.data);
           } else if (response.status === 401) {
-            Alert.alert("Error!", "Change the token");
+            navigation.navigate("Login")
+            Alert.alert("Alert!", "Please login");
           }
           else {
             Alert.alert("Error!", "Something went wrong");

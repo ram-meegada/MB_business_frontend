@@ -54,6 +54,7 @@ const Login = ({ navigation }: Props) => {
       if (response.status === 200) {
         if (response) {
           saveToSecureStorage(ACCESS_TOKEN_LS, json_response.data.access_token);
+          
           if (json_response.data.role == 1) {
             navigation.replace("Home");
           } else {
